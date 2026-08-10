@@ -1,0 +1,97 @@
+// Plan 1 vertical slice schema — Section 2 design
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Market {
+  code          String     @id
+  name          String
+  defaultLocale String     @map("default_locale")
+  isActive      Boolean    @default(true) @map("is_active")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  merchants     Merchant[]
+  offers        Offer[]
+
+  @@map("markets")
+}
+
+model Merchant {
+  id          String   @id @default(uuid())
+  market      String
+  slug        String
+  name        String
+  siteUrl     String   @map("site_url")
+  logoUrl     String?  @map("logo_url")
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  marketRef   Market   @relation(fields: [market], references: [code])
+  offers      Offer[]
+
+  @@unique([market, slug])
+  @@map("merchants")
+}
+
+model Offer {
+  id             String    @id @default(uuid())
+  market         String
+  merchantId     String    @map("merchant_id")
+  title          String
+  description    String?
+  offerType      String    @map("offer_type")
+  code           String?
+  affiliateUrl   String    @map("affiliate_url")
+  status         String
+  startsAt       DateTime? @map("starts_at")
+  endsAt         DateTime? @map("ends_at")
+  isFeatured     Boolean   @default(false) @map("is_featured")
+  sourceId       String    @map("source_id")
+  sourceRecordId String    @map("source_record_id")
+  identityKey    String    @map("identity_key")
+  lastIngestedAt DateTime? @map("last_ingested_at")
+  verifiedAt     DateTime? @map("verified_at")
+  clickCount     Int       @default(0) @map("click_count")
+  terms          String?
+  isExclusive    Boolean   @default(false) @map("is_exclusive")
+  discountLabel  String?   @map("discount_label")
+  imageUrl       String?   @map("image_url")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  merchant       Merchant  @relation(fields: [merchantId], references: [id])
+  marketRef      Market    @relation(fields: [market], references: [code])
+  clicks         ClickEvent[]
+
+  @@unique([sourceId, sourceRecordId])
+  @@index([market, status, endsAt])
+  @@index([merchantId, status])
+  @@map("offers")
+}
+
+model ClickEvent {
+  id        String   @id @default(uuid())
+  offerId   String   @map("offer_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  referrer  String?
+  uaHash    String?  @map("ua_hash")
+  ipHash    String?  @map("ip_hash")
+  meta      Json?
+  offer     Offer    @relation(fields: [offerId], references: [id])
+
+  @@index([offerId, createdAt])
+  @@map("click_events")
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("admin_users")
+}

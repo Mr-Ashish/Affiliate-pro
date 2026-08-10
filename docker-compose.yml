@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: coupon
+      POSTGRES_PASSWORD: coupon
+      POSTGRES_DB: coupon
+    volumes:
+      - coupon_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U coupon -d coupon"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  coupon_pg:

@@ -1,0 +1,16 @@
+project      = "coupon-hub"
+environment  = "prod"
+aws_region   = "us-east-1"
+aws_profile  = "coupon-hub"
+
+enable_web_service  = true
+container_image_tag = "prod"
+desired_count       = 1
+task_cpu            = "512"
+task_memory         = "1024"
+db_instance_class   = "db.t4g.micro"
+db_deletion_protection = true
+db_multi_az            = false
+
+# public_base_url = "https://example.com"
+# operator_cidr   = ""

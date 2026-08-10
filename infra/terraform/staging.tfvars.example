@@ -1,0 +1,19 @@
+project      = "coupon-hub"
+environment  = "staging"
+aws_region   = "us-east-1"
+aws_profile  = "coupon-hub"
+
+# First apply: false (creates ECR/RDS/ALB/CF, no crashing tasks).
+# After `bash scripts/aws/build-push.sh staging`: set true and apply again.
+enable_web_service   = false
+container_image_tag  = "staging"
+desired_count        = 1
+task_cpu             = "256"
+task_memory          = "512"
+db_instance_class    = "db.t4g.micro"
+
+# Optional: your public /32 so migrate.sh can reach RDS from the laptop.
+# operator_cidr = "203.0.113.10/32"
+
+# Set after you attach a custom domain to CloudFront.
+# public_base_url = "https://staging.example.com"

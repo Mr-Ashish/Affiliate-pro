@@ -1,0 +1,62 @@
+name: PR
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: coupon
+          POSTGRES_PASSWORD: coupon
+          POSTGRES_DB: coupon
+        ports:
+          - 5434:5432
+        options: >-
+          --health-cmd "pg_isready -U coupon -d coupon"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://coupon:coupon@localhost:5434/coupon
+      AUTH_SECRET: ci-only-secret-not-for-production-use
+      AUTH_TRUST_HOST: "true"
+      AUTH_URL: http://127.0.0.1:3000
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: changeme
+      CI: "true"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Migrate
+        run: pnpm exec prisma migrate deploy
+
+      - name: Test
+        run: pnpm test
+
+      - name: Lint
+        run: pnpm lint

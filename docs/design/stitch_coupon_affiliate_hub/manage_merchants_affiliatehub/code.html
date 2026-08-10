@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Merchants - AffiliateHub Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#d3daea",
+                        "on-tertiary-container": "#ffeedd",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#dce2f3",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#dce2f3",
+                        "surface": "#f9f9ff",
+                        "inverse-surface": "#2a313d",
+                        "on-surface-variant": "#434655",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#2563eb",
+                        "background": "#f9f9ff",
+                        "tertiary": "#784b00",
+                        "surface-tint": "#0053db",
+                        "secondary-container": "#82f5c1",
+                        "on-secondary-fixed": "#002114",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary": "#004ac6",
+                        "on-background": "#151c27",
+                        "surface-container-low": "#f0f3ff",
+                        "on-primary-container": "#eeefff",
+                        "outline-variant": "#c3c6d7",
+                        "outline": "#737686",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#151c27",
+                        "tertiary-container": "#996100",
+                        "tertiary-fixed": "#ffddb8",
+                        "secondary-fixed-dim": "#68dba9",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed-variant": "#005137",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary": "#006c4a",
+                        "surface-container-high": "#e2e8f8",
+                        "inverse-on-surface": "#ebf1ff",
+                        "surface-bright": "#f9f9ff",
+                        "surface-container": "#e7eefe",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-fixed": "#85f8c4",
+                        "on-secondary-container": "#00714e",
+                        "on-tertiary-fixed": "#2a1700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "40px",
+                        "base": "4px",
+                        "2xl": "64px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "code-snippet": ["JetBrains Mono"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "code-snippet": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.25", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md m-0 p-0 antialiased h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-surface-container-lowest border-r border-outline-variant flex flex-col p-md gap-sm z-40 hidden md:flex">
+<!-- Brand / Header -->
+<div class="flex items-center gap-sm mb-lg px-sm">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A clean, modern geometric logo for an admin panel. The logo uses a vibrant primary blue (#2563EB) against a crisp white background. It represents connectivity and data flow in a professional, corporate style. Light mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiaZl5oZGM1-ESpkQBW5L3031HgufHiPfAZe-gYyYP9kOpCRLXacDlEYpcrGDC0hL_4d3Yn-hGsGILKHWxQ3iA-1nNNqJ3-5h-19YVkeFhfq4_k7Z3pousiWE7W0R303TgLzZ0AKihSEd6FKg1JRzuxYPsB4gzNmD4NEkuHyPiAqfCHdlxclmRkeYXUWjxEO-VQ3eAYZD9X2kMd0-71Am6PXmRecEWSku5iGOrn1XWtFYCYzVvnCN7WOujt6toTtSUihOFhLkncQw"/>
+<div>
+<h1 class="text-headline-md font-headline-md font-bold text-primary">Admin Panel</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Manage Hub</p>
+</div>
+</div>
+<!-- CTA -->
+<button class="bg-primary-container text-on-primary-container hover:opacity-90 font-headline-md text-headline-md font-bold py-md px-lg rounded-xl mb-lg w-full flex items-center justify-center gap-sm transition-all shadow-sm">
+<span class="material-symbols-outlined fill">add</span>
+            Add New Offer
+        </button>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-xs flex-1">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-bold scale-[0.98] transition-transform text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined fill" data-icon="storefront">storefront</span>
+                Merchants
+            </a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+                Categories
+            </a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="local_offer">local_offer</span>
+                Offers
+            </a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="ads_click">ads_click</span>
+                Clicks
+            </a>
+</nav>
+<!-- Footer Links -->
+<div class="flex flex-col gap-xs mt-auto pt-md border-t border-outline-variant">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors text-body-md font-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-[240px] w-full md:w-[calc(100%-240px)] h-full">
+<!-- TopNavBar -->
+<header class="docked full-width top-0 sticky bg-surface border-b border-outline-variant flex justify-between items-center px-md py-sm z-30 h-16">
+<h2 class="text-headline-md font-headline-md font-bold text-on-surface">Dashboard</h2>
+<div class="flex items-center gap-sm">
+<button aria-label="Notifications" class="text-on-surface-variant hover:bg-surface-variant rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="Help" class="text-on-surface-variant hover:bg-surface-variant rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<img class="w-8 h-8 rounded-full ml-sm object-cover border border-outline-variant" data-alt="A small circular avatar of a professional user in a light mode admin interface. The portrait is simple, well-lit, and conveys a corporate modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCATN9nH20LLpv5cfo66KQ5Mmh3wl1TDGGpBBfDnRj_xc1ie_P0HnVbAWxxDpBV8zyqSXOarlX5x3m0QlKnVam7Rv5Ik6Y0gu6xtfXT16OdKfKxW7eFkbPx8ESocrxJeoHEmmmU5HuT-3T4Dh-GPp_mV-CdGauz97qg1SLyGNwwvLkfg_-iCuru6OUhB7sN8m2ql58WuHopF4hxDNFKHA6-spbRBR6kFsm9YLKmPpiBpmulVI--4PXKJahGIF2b_e_OT4shASUeJ_o"/>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 overflow-y-auto p-md md:p-lg bg-surface">
+<!-- Page Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-lg gap-md">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface hidden md:block">Merchants</h2>
+<h2 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface md:hidden">Merchants</h2>
+<p class="text-body-md font-body-md text-on-surface-variant mt-xs">Manage active and inactive merchants in the system.</p>
+</div>
+<button class="bg-[#2563EB] text-white hover:bg-primary px-lg py-sm rounded-xl font-headline-md text-headline-md transition-colors flex items-center gap-sm shadow-sm h-12">
+<span class="material-symbols-outlined font-bold">add</span>
+                    Add Merchant
+                </button>
+</div>
+<!-- Filter Bar -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm mb-lg flex flex-col md:flex-row gap-md items-center justify-between">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg bg-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md" placeholder="Search merchants by name..." type="text"/>
+</div>
+<div class="flex items-center gap-sm w-full md:w-auto">
+<span class="text-body-sm font-body-sm text-on-surface-variant font-bold">Status:</span>
+<select class="border border-outline-variant rounded-lg bg-surface px-sm py-2 text-body-md font-body-md focus:outline-none focus:border-primary">
+<option value="all">All</option>
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[800px]">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant text-label-caps font-label-caps text-on-surface-variant uppercase tracking-wider">
+<th class="p-md font-bold w-16">Logo</th>
+<th class="p-md font-bold">Name</th>
+<th class="p-md font-bold">Market</th>
+<th class="p-md font-bold text-center">Offers</th>
+<th class="p-md font-bold text-center">Status</th>
+<th class="p-md font-bold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-body-sm divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors h-[40px] group">
+<td class="p-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-white flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A simple, minimalist logo for a generic online retailer. Centered in a small circle, using a primary blue accent color against a stark white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9BPMNzFcdSAohMLO1u4rHAwWZtXWqkkcgMMHZd4hpVOdrXF2O-wrpVW8c7c1aZasqXNtuK8wkzc9Sg3MSDN0DDIECtleTdPo0C8Er7AfMo8ugdQrIIb6ug7wTcOe-Yz0bwTKwMqZitRrVFK2KKjRRoWSydAHXVSGFcAYbW-2sMQgKgih1VqfONQGUZVvB58wIE5XCarKfi9fgZKUdaOE2dF0RYlzONWXj8qVrbeILz7OJyT7UYZYCcFw9UGAtile6B5xylAie4X8"/>
+</div>
+</td>
+<td class="p-md font-headline-md text-headline-md text-on-surface">TechGear Hub</td>
+<td class="p-md text-on-surface-variant">US</td>
+<td class="p-md text-center font-code-snippet text-code-snippet text-on-surface">12</td>
+<td class="p-md text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-caps font-label-caps bg-secondary-container text-on-secondary-container">Active</span>
+</td>
+<td class="p-md text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="View Store">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Edit">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="bg-surface hover:bg-surface-container-low transition-colors h-[40px] group">
+<td class="p-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-white flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean icon representing a fashion brand. Simple geometric lines in dark gray on a white background, tailored for a professional admin panel list view." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFnNx0TJ6hBVR-FORPRiftu1hASE99l6Ku3I-vy5opMOgb1vD5A_-gC3zIsVC4L_9nLPtRLAzdcGz2JMg7PeSMNMWHi7QBBuFAoTOtUE7CdOG_-WlwJbxIo6FJ-y6fcQEVkfHmVk1vY0gatlwKP6nQbX1dFuN4MPcjGrBAGVJvCwmF0n0AFaOymQg9Q5rDQi4b5fjxFihqLXZuFf8yD2-0KtfodOi7BfVACksCGjeZG0ek6G9-4CZeN9_8rV28iX8SaZ2Vo2pzQoA"/>
+</div>
+</td>
+<td class="p-md font-headline-md text-headline-md text-on-surface">StyleAvenue</td>
+<td class="p-md text-on-surface-variant">UK</td>
+<td class="p-md text-center font-code-snippet text-code-snippet text-on-surface">8</td>
+<td class="p-md text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-caps font-label-caps bg-secondary-container text-on-secondary-container">Active</span>
+</td>
+<td class="p-md text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="View Store">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Edit">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors h-[40px] group">
+<td class="p-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-white flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An abstract shape logo indicating a software service. Corporate modern aesthetic, featuring crisp edges and a muted blue tone on a plain white circular background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDltr1oglWduBWRvUYDb43cJ9DYfpKyzmaidfjxWXMEce0vzfsI1AM5mXlUx22k5g06W3CllI0AYytka_tvFsmTH7Kxq06E-m-NJTk7NJQP1xzuF4wbpntZydGqxGCaGKWo4gm-B6YXKF9S3Usnv2i2Vok2P1ICbJlbJoep_PMPrHoQSUBHLq-RBcazSrSGHhZNcr_OB55Hao1kfRkZhuPc4Xgocf3VLh3mOGEc8aj30koZhiyOlUFrqTk9QotWZYL1YAaZDDPpgBE"/>
+</div>
+</td>
+<td class="p-md font-headline-md text-headline-md text-on-surface">CloudHost Pro</td>
+<td class="p-md text-on-surface-variant">Global</td>
+<td class="p-md text-center font-code-snippet text-code-snippet text-on-surface">0</td>
+<td class="p-md text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-caps font-label-caps bg-surface-container-high text-on-surface-variant">Inactive</span>
+</td>
+<td class="p-md text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="View Store">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Edit">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="bg-surface hover:bg-surface-container-low transition-colors h-[40px] group">
+<td class="p-md">
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-white flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist leaf icon representing an organic goods store. Bright green accent on a pure white background, suitable for a small avatar in a data table." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYN0QCWhJaZGyBpmBrxRMLKZAEoNVkRLOP2x2HNUSOn5vJxnzMJ2NwBFZPB78PVedA37SCYEiZvMafVE8a1dtdQllNi5z5APUoXdMaMm1OJSLvqDUgc_AyTPEjbSQ1_gNizpOXZXDJSa5dOzk_dxCUAKU2VHYfRZjLXQjJiWe-sjBJKiyAeM2SbkT6l_EDxYjz9mSAKS6npwwI_1gwRXiQAXujQnZuqSInXsnRrD4HI5Zh82cWsdWOGx6RutLl1fqBh883Z0T5uq8"/>
+</div>
+</td>
+<td class="p-md font-headline-md text-headline-md text-on-surface">Nature's Best</td>
+<td class="p-md text-on-surface-variant">US</td>
+<td class="p-md text-center font-code-snippet text-code-snippet text-on-surface">24</td>
+<td class="p-md text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full text-label-caps font-label-caps bg-secondary-container text-on-secondary-container">Active</span>
+</td>
+<td class="p-md text-right">
+<div class="flex items-center justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="View Store">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="Edit">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-md border-t border-outline-variant bg-surface-container-lowest flex justify-between items-center">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Showing 1 to 4 of 48 entries</span>
+<div class="flex items-center gap-xs">
+<button class="p-2 border border-outline-variant rounded text-on-surface-variant hover:bg-surface-variant disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<span class="text-body-sm font-body-sm text-on-surface px-2">Page 1 of 12</span>
+<button class="p-2 border border-outline-variant rounded text-on-surface-variant hover:bg-surface-variant">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

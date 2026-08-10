@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dashboard - AffiliateHub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d3daea",
+                      "on-tertiary-container": "#ffeedd",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-variant": "#dce2f3",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "error": "#ba1a1a",
+                      "surface-container-highest": "#dce2f3",
+                      "surface": "#f9f9ff",
+                      "inverse-surface": "#2a313d",
+                      "on-surface-variant": "#434655",
+                      "on-primary": "#ffffff",
+                      "primary-container": "#2563eb",
+                      "background": "#f9f9ff",
+                      "tertiary": "#784b00",
+                      "surface-tint": "#0053db",
+                      "secondary-container": "#82f5c1",
+                      "on-secondary-fixed": "#002114",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "primary": "#004ac6",
+                      "on-background": "#151c27",
+                      "surface-container-low": "#f0f3ff",
+                      "on-primary-container": "#eeefff",
+                      "outline-variant": "#c3c6d7",
+                      "outline": "#737686",
+                      "error-container": "#ffdad6",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b4c5ff",
+                      "on-secondary": "#ffffff",
+                      "on-surface": "#151c27",
+                      "tertiary-container": "#996100",
+                      "tertiary-fixed": "#ffddb8",
+                      "secondary-fixed-dim": "#68dba9",
+                      "primary-fixed": "#dbe1ff",
+                      "on-secondary-fixed-variant": "#005137",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "secondary": "#006c4a",
+                      "surface-container-high": "#e2e8f8",
+                      "inverse-on-surface": "#ebf1ff",
+                      "surface-bright": "#f9f9ff",
+                      "surface-container": "#e7eefe",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-tertiary": "#ffffff",
+                      "on-primary-fixed": "#00174b",
+                      "secondary-fixed": "#85f8c4",
+                      "on-secondary-container": "#00714e",
+                      "on-tertiary-fixed": "#2a1700"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "xl": "40px",
+                      "base": "4px",
+                      "2xl": "64px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "md": "16px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "code-snippet": [
+                              "JetBrains Mono"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "code-snippet": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.25",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased min-h-screen flex">
+<!-- SideNavBar (from JSON) -->
+<aside class="hidden md:flex flex-col h-full p-md gap-sm bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline fixed left-0 top-0 w-[240px] z-40">
+<!-- Header -->
+<div class="flex items-center gap-sm mb-lg px-sm">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A small, professional headshot of an administrative user, brightly lit against a neutral modern office background, soft focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpxEvFLbqTtF23vR_2KjWnR1OSrafuESmY3fnP6AMCf3FHyJcMFqLtIVHhCNPcCMPsh8rDQIkUjTSsSFU8WD8mrNvR8-lWJLZAnPxP7SzFyQzyC1xGtcx6l4VyEsFDQR5zGrrH-7KZXrqfUewBaPPrpAKdnOZO2M24Q8lmw90wQyubZv-YyMFKURyaE-K8M1q8HpOTbpX67ZHHo0XXQBYmIpMuR-RvEkvxUemCtDcV_UR1zFRubQHDbQNzowSvAczAro2mG8K6voU"/>
+<div>
+<h2 class="text-headline-md font-headline-md font-bold text-primary">Admin Panel</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Manage Hub</p>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 flex flex-col gap-xs">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-sm px-sm py-sm bg-primary-container text-on-primary-container rounded-lg font-bold transition-transform scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                Dashboard
+            </a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">storefront</span>
+                Merchants
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">category</span>
+                Categories
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">local_offer</span>
+                Offers
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">ads_click</span>
+                Clicks
+            </a>
+</nav>
+<!-- CTA -->
+<button class="bg-primary text-on-primary px-md py-sm rounded-lg font-body-md text-body-md font-semibold hover:bg-surface-tint transition-colors flex items-center justify-center gap-xs mt-auto">
+<span class="material-symbols-outlined">add</span>
+            Add New Offer
+        </button>
+<!-- Footer Tabs -->
+<div class="mt-lg pt-sm border-t border-outline-variant flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-[240px] flex flex-col min-h-screen">
+<!-- Admin TopNavBar (from JSON) -->
+<header class="flex justify-between items-center px-md py-sm w-full bg-surface dark:bg-inverse-surface border-b border-outline-variant sticky top-0 z-30">
+<div class="text-headline-md font-headline-md font-bold text-on-surface flex items-center gap-sm md:hidden">
+<span class="material-symbols-outlined md:hidden">menu</span>
+                Dashboard
+            </div>
+<div class="hidden md:block text-headline-md font-headline-md font-bold text-on-surface">
+                Dashboard
+            </div>
+<div class="flex items-center gap-sm">
+<button class="p-xs rounded-full text-on-surface-variant hover:bg-surface-variant transition-all hover:text-primary">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs rounded-full text-on-surface-variant hover:bg-surface-variant transition-all hover:text-primary">
+<span class="material-symbols-outlined">help</span>
+</button>
+<img class="w-8 h-8 rounded-full ml-sm object-cover border border-outline-variant" data-alt="A small, professional headshot of an administrative user, brightly lit against a neutral modern office background, soft focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtMZ8-fy2qx86jqNHFdF7_chQ1X18HoauxTalzc-H6rFQXjAjxTRRoVcmssOwPceWI42VR-3sD2FyOFzvDJqGPZY8HSAyHOGfahGSJzlq85B0R5bF4ENV0J81s6f5XnUP2cofEiZd3Km1TTgOOeCZvDWcMlzpCKPolLnc2GA0OBnxjizfMIJk3Zf1vfJtFvI4MRpatXNQvlBnwt2pfG2iyBJBJIOPWNwjX6yNsTZMSg06G-lvNj8VCYrWZd0Cn1CfM2_TgjneOsuA"/>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-md md:p-lg flex-1 overflow-y-auto">
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface hidden md:block">Overview</h1>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface md:hidden">Overview</h1>
+</div>
+<div class="flex gap-sm">
+<button class="px-sm py-xs border border-outline text-on-surface rounded-lg font-body-sm text-body-sm hover:bg-surface-variant transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">add_business</span>
+                        New Merchant
+                    </button>
+<button class="px-sm py-xs bg-primary text-on-primary rounded-lg font-body-sm text-body-sm hover:bg-surface-tint transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        New Offer
+                    </button>
+</div>
+</div>
+<!-- Stats Grid (Bento style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md mb-xl">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<p class="text-body-sm font-body-sm text-on-surface-variant">Active Offers</p>
+<span class="material-symbols-outlined text-secondary">trending_up</span>
+</div>
+<div>
+<p class="text-display-lg font-display-lg text-on-surface">1,240</p>
+<p class="text-label-caps font-label-caps text-secondary mt-xs">+12% this week</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<p class="text-body-sm font-body-sm text-on-surface-variant">Expired</p>
+<span class="material-symbols-outlined text-error">warning</span>
+</div>
+<div>
+<p class="text-display-lg font-display-lg text-on-surface">45</p>
+<p class="text-label-caps font-label-caps text-on-surface-variant mt-xs">Needs attention</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<p class="text-body-sm font-body-sm text-on-surface-variant">Drafts</p>
+<span class="material-symbols-outlined text-outline">edit_document</span>
+</div>
+<div>
+<p class="text-display-lg font-display-lg text-on-surface">12</p>
+<p class="text-label-caps font-label-caps text-on-surface-variant mt-xs">Pending review</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<p class="text-body-sm font-body-sm text-on-surface-variant">Total Merchants</p>
+<span class="material-symbols-outlined text-primary">storefront</span>
+</div>
+<div>
+<p class="text-display-lg font-display-lg text-on-surface">180</p>
+<p class="text-label-caps font-label-caps text-primary mt-xs">+3 new today</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Top Offers Table (Spans 2 columns on lg) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="text-headline-md font-headline-md text-on-surface">Top Offers</h2>
+<button class="text-body-sm font-body-sm text-primary hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-body-sm font-body-sm">
+<thead class="bg-surface-container-lowest text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="p-sm font-semibold">Merchant</th>
+<th class="p-sm font-semibold">Offer Code</th>
+<th class="p-sm font-semibold text-right">Clicks</th>
+<th class="p-sm font-semibold">Status</th>
+<th class="p-sm font-semibold text-right">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors h-[40px]">
+<td class="p-sm flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-[10px] font-bold text-on-surface">A</div>
+                                        Amazon
+                                    </td>
+<td class="p-sm"><span class="font-code-snippet text-code-snippet bg-surface-variant px-1 rounded border border-dashed border-outline-variant">SAVE20</span></td>
+<td class="p-sm text-right font-code-snippet text-code-snippet">4,231</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-secondary-container text-on-secondary-container">Active</span>
+</td>
+<td class="p-sm text-right">
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors h-[40px] bg-surface-bright">
+<td class="p-sm flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-[10px] font-bold text-on-surface">N</div>
+                                        Nike
+                                    </td>
+<td class="p-sm"><span class="font-code-snippet text-code-snippet bg-surface-variant px-1 rounded border border-dashed border-outline-variant">FREESHIP</span></td>
+<td class="p-sm text-right font-code-snippet text-code-snippet">3,890</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-secondary-container text-on-secondary-container">Active</span>
+</td>
+<td class="p-sm text-right">
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors h-[40px]">
+<td class="p-sm flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-[10px] font-bold text-on-surface">B</div>
+                                        BestBuy
+                                    </td>
+<td class="p-sm text-on-surface-variant italic">No Code (Link)</td>
+<td class="p-sm text-right font-code-snippet text-code-snippet">2,104</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-error-container text-on-error-container">Ending Soon</span>
+</td>
+<td class="p-sm text-right">
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors h-[40px] bg-surface-bright">
+<td class="p-sm flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-variant border border-outline-variant flex items-center justify-center text-[10px] font-bold text-on-surface">T</div>
+                                        Target
+                                    </td>
+<td class="p-sm"><span class="font-code-snippet text-code-snippet bg-surface-variant px-1 rounded border border-dashed border-outline-variant">TARGET10</span></td>
+<td class="p-sm text-right font-code-snippet text-code-snippet">1,845</td>
+<td class="p-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-surface-container-highest text-on-surface-variant">Draft</span>
+</td>
+<td class="p-sm text-right">
+<button class="text-outline hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Recent Activity Feed -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-sm">
+<h2 class="text-headline-md font-headline-md text-on-surface mb-md">Recent Activity</h2>
+<ul class="flex flex-col gap-sm relative">
+<!-- Vertical line connecting activities -->
+<div class="absolute left-[11px] top-2 bottom-2 w-px bg-outline-variant -z-10"></div>
+<li class="flex gap-sm items-start bg-surface-bright p-sm rounded-lg border border-transparent hover:border-outline-variant transition-colors">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0 mt-xs z-10 border-[2px] border-surface-container-lowest">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface"><span class="font-semibold">Sarah Jenkins</span> updated offer <span class="font-code-snippet text-code-snippet text-xs">SAVE20</span></p>
+<p class="text-label-caps font-label-caps text-on-surface-variant mt-xs">10 mins ago</p>
+</div>
+</li>
+<li class="flex gap-sm items-start bg-surface-bright p-sm rounded-lg border border-transparent hover:border-outline-variant transition-colors">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 mt-xs z-10 border-[2px] border-surface-container-lowest">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface"><span class="font-semibold">Mike Ross</span> added new merchant <span class="font-semibold">Walmart</span></p>
+<p class="text-label-caps font-label-caps text-on-surface-variant mt-xs">1 hour ago</p>
+</div>
+</li>
+<li class="flex gap-sm items-start bg-surface-bright p-sm rounded-lg border border-transparent hover:border-outline-variant transition-colors">
+<div class="w-6 h-6 rounded-full bg-error-container text-on-error-container flex items-center justify-center shrink-0 mt-xs z-10 border-[2px] border-surface-container-lowest">
+<span class="material-symbols-outlined text-[14px]">delete</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface"><span class="font-semibold">System</span> expired 14 old offers</p>
+<p class="text-label-caps font-label-caps text-on-surface-variant mt-xs">3 hours ago</p>
+</div>
+</li>
+<li class="flex gap-sm items-start bg-surface-bright p-sm rounded-lg border border-transparent hover:border-outline-variant transition-colors">
+<div class="w-6 h-6 rounded-full bg-surface-variant text-on-surface flex items-center justify-center shrink-0 mt-xs z-10 border-[2px] border-surface-container-lowest">
+<span class="material-symbols-outlined text-[14px]">draft</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface"><span class="font-semibold">Elena G.</span> saved draft for <span class="font-semibold">Adidas</span></p>
+<p class="text-label-caps font-label-caps text-on-surface-variant mt-xs">Yesterday</p>
+</div>
+</li>
+<li class="flex gap-sm items-start bg-surface-bright p-sm rounded-lg border border-transparent hover:border-outline-variant transition-colors">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0 mt-xs z-10 border-[2px] border-surface-container-lowest">
+<span class="material-symbols-outlined text-[14px]">edit</span>
+</div>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface"><span class="font-semibold">Sarah Jenkins</span> edited category <span class="font-semibold">Electronics</span></p>
+<p class="text-label-caps font-label-caps text-on-surface-variant mt-xs">Yesterday</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+</body></html>
