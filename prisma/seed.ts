@@ -2,6 +2,7 @@ import { hash } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import {
   seedDemoCatalog,
+  shouldAllowDemoSeed,
   shouldSeedDemo,
 } from "../src/lib/catalog/seed-demo";
 
@@ -20,6 +21,16 @@ async function main() {
       name: "United States",
       defaultLocale: "en-US",
       isActive: true,
+    },
+  });
+
+  await prisma.author.upsert({
+    where: { slug: "editors" },
+    update: { name: "AffiliateHub Editors" },
+    create: {
+      slug: "editors",
+      name: "AffiliateHub Editors",
+      bio: "The AffiliateHub editorial team.",
     },
   });
 
@@ -48,7 +59,12 @@ async function main() {
 
   // Default (`pnpm db:seed`) stays market + admin only.
   // Demo catalog: `pnpm db:seed -- --demo` or SEED_DEMO=1
+  // AWS_SEED_ENV=prod refuses demo even if the flag is set.
   if (shouldSeedDemo(process.argv, process.env)) {
+    const awsEnv = process.env.AWS_SEED_ENV ?? "local";
+    if (!shouldAllowDemoSeed(awsEnv)) {
+      throw new Error(`demo catalog seed is forbidden on ${awsEnv}`);
+    }
     const result = await seedDemoCatalog(prisma);
     console.log(
       `Seeded demo catalog: ${result.merchants} merchants, ${result.offers} offers`,
