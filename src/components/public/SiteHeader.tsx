@@ -6,6 +6,7 @@ import { cn } from "@/lib/ui/cn";
 
 const nav = [
   { href: "/stores", label: "Stores" },
+  { href: "/blog", label: "Blog" },
   { href: "/categories", label: "Categories" },
   { href: "/deals", label: "Deals" },
   { href: "/trending", label: "Trending" },
