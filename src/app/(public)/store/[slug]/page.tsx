@@ -12,6 +12,9 @@ import {
 } from "@/lib/catalog/store-page";
 import { toDealCardViewModel } from "@/lib/ui/view-models";
 import { listActiveMerchants } from "@/lib/catalog/merchants";
+import { catalogOrEmpty } from "@/lib/db-prerender";
+import { listPublishedPostsForMerchant } from "@/lib/editorial/posts";
+
 const MARKET = "US";
 
 /** Must be a numeric literal for Next.js (see PUBLIC_PAGE_REVALIDATE_SECONDS). */
@@ -22,12 +25,11 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  try {
-    const merchants = await listActiveMerchants({ market: MARKET, limit: 200 });
-    return merchants.map((m) => ({ slug: m.slug }));
-  } catch {
-    return [];
-  }
+  const merchants = await catalogOrEmpty(
+    () => listActiveMerchants({ market: MARKET, limit: 200 }),
+    [],
+  );
+  return merchants.map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -52,6 +54,10 @@ export default async function StorePage({ params }: Props) {
 
   const { merchant, offers } = data;
   const cards = offers.map((o) => toDealCardViewModel(o, merchant));
+  const guides = await catalogOrEmpty(
+    () => listPublishedPostsForMerchant(merchant.id, 3),
+    [],
+  );
 
   return (
     <main>
@@ -155,6 +161,29 @@ export default async function StorePage({ params }: Props) {
             </Card>
           </aside>
         </div>
+
+        {guides.length > 0 ? (
+          <section aria-labelledby="guides-heading">
+            <h2
+              id="guides-heading"
+              className="mb-4 text-xl font-bold text-on-surface"
+            >
+              Guides
+            </h2>
+            <ul className="space-y-2">
+              {guides.map((post) => (
+                <li key={post.id}>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="text-primary hover:underline"
+                  >
+                    {post.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
       </Container>
     </main>
   );
