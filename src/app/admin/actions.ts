@@ -7,7 +7,9 @@ import {
   getMerchantSlugById,
 } from "@/lib/catalog/merchants";
 import { createManualOffer } from "@/lib/catalog/offers";
-import { revalidatePublicCatalog } from "@/lib/catalog/public-cache";
+import { revalidateEditorial, revalidatePublicCatalog } from "@/lib/catalog/public-cache";
+import { createPost, updatePost } from "@/lib/editorial/posts";
+import type { PostStatus } from "@/lib/editorial/types";
 import type { OfferStatus, OfferType } from "@/lib/catalog/types";
 
 const OFFER_TYPES = new Set<OfferType>(["coupon", "deal", "sale"]);
@@ -95,4 +97,71 @@ export async function createOfferAction(formData: FormData) {
     redirect(`/admin/offers/new?error=${encodeURIComponent(error)}`);
   }
   redirect("/admin/offers");
+}
+
+function optionalText(value: FormDataEntryValue | null): string | null {
+  const trimmed = String(value ?? "").trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function postFieldsFromForm(formData: FormData) {
+  const statusRaw = String(formData.get("status") ?? "").trim();
+  const status: PostStatus = statusRaw.length > 0 ? (statusRaw as PostStatus) : "draft";
+  return {
+    title: String(formData.get("title") ?? "").trim(),
+    slug: String(formData.get("slug") ?? "").trim(),
+    excerpt: String(formData.get("excerpt") ?? "").trim(),
+    body: String(formData.get("body") ?? "").trim(),
+    status,
+    isFeatured: formData.get("isFeatured") === "on",
+    seoTitle: optionalText(formData.get("seoTitle")),
+    seoDescription: optionalText(formData.get("seoDescription")),
+    heroImageUrl: optionalText(formData.get("heroImageUrl")),
+    heroImageAlt: optionalText(formData.get("heroImageAlt")),
+    merchantIds: formData
+      .getAll("merchantIds")
+      .map((id) => String(id).trim())
+      .filter((id) => id.length > 0),
+  };
+}
+
+export async function createPostAction(formData: FormData) {
+  await requireAdmin();
+
+  const fields = postFieldsFromForm(formData);
+
+  let error: string | null = null;
+  try {
+    await createPost(fields);
+    revalidateEditorial(fields.slug);
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to create post";
+  }
+
+  if (error) {
+    redirect(`/admin/posts/new?error=${encodeURIComponent(error)}`);
+  }
+  redirect("/admin/posts");
+}
+
+export async function updatePostAction(formData: FormData) {
+  await requireAdmin();
+
+  const id = String(formData.get("id") ?? "").trim();
+  const fields = postFieldsFromForm(formData);
+
+  let error: string | null = null;
+  try {
+    await updatePost({ id, ...fields });
+    revalidateEditorial(fields.slug);
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to update post";
+  }
+
+  if (error) {
+    redirect(
+      `/admin/posts/${id}/edit?error=${encodeURIComponent(error)}`,
+    );
+  }
+  redirect("/admin/posts");
 }

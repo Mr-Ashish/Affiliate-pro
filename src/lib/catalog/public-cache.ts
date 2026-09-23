@@ -10,3 +10,10 @@ export function revalidatePublicCatalog(storeSlug?: string) {
     revalidatePath(`/store/${storeSlug}`);
   }
 }
+
+export function revalidateEditorial(slug?: string) {
+  revalidatePath("/");
+  revalidatePath("/blog");
+  if (slug) revalidatePath(`/blog/${slug}`);
+  revalidatePath("/sitemap.xml");
+}
