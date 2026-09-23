@@ -170,6 +170,7 @@ model PostMerchant {
   merchant    Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
 
   @@id([postId, merchantId])
+  @@index([merchantId])
   @@map("post_merchants")
 }
 
