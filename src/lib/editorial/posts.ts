@@ -129,6 +129,20 @@ function normalizeOptionalText(
   return trimmed.length === 0 ? null : trimmed;
 }
 
+function normalizeHeroImageUrl(
+  value: string | null | undefined,
+): string | null | undefined {
+  const normalized = normalizeOptionalText(value);
+  if (normalized === undefined || normalized === null) return normalized;
+  if (
+    !normalized.startsWith("http://") &&
+    !normalized.startsWith("https://")
+  ) {
+    throw new Error("heroImageUrl must start with http:// or https://");
+  }
+  return normalized;
+}
+
 function uniqueIds(ids: string[]): string[] {
   return [...new Set(ids)];
 }
@@ -228,7 +242,7 @@ export async function createPost(input: CreatePostInput): Promise<PostCard> {
   const bodyFormat = normalizeBodyFormat(input.bodyFormat);
   const status = normalizeStatus(input.status);
   const now = new Date();
-  const heroUrl = normalizeOptionalText(input.heroImageUrl);
+  const heroUrl = normalizeHeroImageUrl(input.heroImageUrl);
 
   try {
     return await prisma.$transaction(async (tx) => {
@@ -266,7 +280,7 @@ export async function updatePost(input: UpdatePostInput): Promise<PostCard> {
   const bodyFormat = normalizeBodyFormat(input.bodyFormat);
   const status = normalizeStatus(input.status);
   const now = new Date();
-  const heroUrl = normalizeOptionalText(input.heroImageUrl);
+  const heroUrl = normalizeHeroImageUrl(input.heroImageUrl);
 
   try {
     return await prisma.$transaction(async (tx) => {

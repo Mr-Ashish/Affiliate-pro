@@ -6,6 +6,7 @@ const updatePostMock = vi.fn();
 const createMerchantMock = vi.fn();
 const createManualOfferMock = vi.fn();
 const getMerchantSlugByIdMock = vi.fn();
+const revalidateEditorialMock = vi.fn();
 const redirectMock = vi.fn((url: string) => {
   const err = new Error(`NEXT_REDIRECT:${url}`);
   (err as Error & { digest: string }).digest = `NEXT_REDIRECT;replace;${url};303;`;
@@ -19,6 +20,11 @@ vi.mock("@/lib/auth", () => ({
 vi.mock("@/lib/editorial/posts", () => ({
   createPost: (...args: unknown[]) => createPostMock(...args),
   updatePost: (...args: unknown[]) => updatePostMock(...args),
+}));
+
+vi.mock("@/lib/catalog/public-cache", () => ({
+  revalidateEditorial: (...args: unknown[]) => revalidateEditorialMock(...args),
+  revalidatePublicCatalog: vi.fn(),
 }));
 
 vi.mock("@/lib/catalog/merchants", () => ({
@@ -61,8 +67,15 @@ describe("admin post server actions", () => {
     createMerchantMock.mockReset();
     createManualOfferMock.mockReset();
     getMerchantSlugByIdMock.mockReset();
+    revalidateEditorialMock.mockReset();
     redirectMock.mockClear();
   });
+
+  function redirectErrorMessage(urlPrefix: string): string {
+    const url = String(redirectMock.mock.calls.at(-1)?.[0] ?? "");
+    expect(url.startsWith(urlPrefix)).toBe(true);
+    return decodeURIComponent(new URL(url, "http://admin.local").searchParams.get("error") ?? "");
+  }
 
   describe("createPostAction", () => {
     it("rejects unauthenticated callers", async () => {
@@ -116,6 +129,115 @@ describe("admin post server actions", () => {
         heroImageAlt: "Hero",
         merchantIds: ["m1", "m2"],
       });
+      expect(revalidateEditorialMock).toHaveBeenCalledWith("how-to-save");
+    });
+
+    it("rejects a status outside draft|published and redirects with error", async () => {
+      authMock.mockResolvedValue({ user: { id: "admin-1", email: "a@b.c" } });
+      const { createPostAction } = await import("@/app/admin/actions");
+
+      await expect(
+        createPostAction(
+          form({
+            title: "How to save",
+            slug: "how-to-save",
+            excerpt: "Tips",
+            body: "## Hello",
+            status: "archived",
+          }),
+        ),
+      ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/posts\/new\?error=/);
+
+      expect(createPostMock).not.toHaveBeenCalled();
+      expect(revalidateEditorialMock).not.toHaveBeenCalled();
+      expect(redirectErrorMessage("/admin/posts/new")).toMatch(
+        /status must be draft or published/i,
+      );
+    });
+
+    it("revalidates the persisted slug returned by createPost", async () => {
+      authMock.mockResolvedValue({ user: { id: "admin-1", email: "a@b.c" } });
+      createPostMock.mockResolvedValue({ id: "p1", slug: "nike-sale-calendar" });
+      const { createPostAction } = await import("@/app/admin/actions");
+
+      await expect(
+        createPostAction(
+          form({
+            title: "Nike Sale Calendar",
+            slug: "Nike Sale Calendar",
+            excerpt: "Tips",
+            body: "## Hello",
+            status: "published",
+          }),
+        ),
+      ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/posts$/);
+
+      expect(revalidateEditorialMock).toHaveBeenCalledWith("nike-sale-calendar");
+      expect(revalidateEditorialMock).not.toHaveBeenCalledWith("Nike Sale Calendar");
+    });
+
+    it("rejects a non-http(s) hero image URL and redirects with error", async () => {
+      authMock.mockResolvedValue({ user: { id: "admin-1", email: "a@b.c" } });
+      const { createPostAction } = await import("@/app/admin/actions");
+
+      await expect(
+        createPostAction(
+          form({
+            title: "How to save",
+            slug: "how-to-save",
+            excerpt: "Tips",
+            body: "## Hello",
+            heroImageUrl: "javascript:alert(1)",
+          }),
+        ),
+      ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/posts\/new\?error=/);
+
+      expect(createPostMock).not.toHaveBeenCalled();
+      expect(redirectErrorMessage("/admin/posts/new")).toMatch(
+        /heroImageUrl must start with http:\/\/ or https:\/\//i,
+      );
+    });
+
+    it("allows an empty or http(s) hero image URL", async () => {
+      authMock.mockResolvedValue({ user: { id: "admin-1", email: "a@b.c" } });
+      createPostMock.mockResolvedValue({ id: "p1", slug: "how-to-save" });
+      const { createPostAction } = await import("@/app/admin/actions");
+
+      await expect(
+        createPostAction(
+          form({
+            title: "How to save",
+            slug: "how-to-save",
+            excerpt: "Tips",
+            body: "## Hello",
+            heroImageUrl: "  ",
+          }),
+        ),
+      ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/posts$/);
+
+      expect(createPostMock).toHaveBeenCalledWith(
+        expect.objectContaining({ heroImageUrl: null }),
+      );
+
+      createPostMock.mockClear();
+      createPostMock.mockResolvedValue({ id: "p1", slug: "how-to-save" });
+      await expect(
+        createPostAction(
+          form({
+            title: "How to save",
+            slug: "how-to-save",
+            excerpt: "Tips",
+            body: "## Hello",
+            heroImageUrl: "http://cdn.example/h.jpg",
+          }),
+        ),
+      ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/posts$/);
+
+      expect(createPostMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          heroImageUrl: "http://cdn.example/h.jpg",
+        }),
+      );
     });
 
     it("redirects with error when title is empty", async () => {
@@ -167,6 +289,29 @@ describe("admin post server actions", () => {
           merchantIds: ["m1"],
         }),
       );
+      expect(revalidateEditorialMock).toHaveBeenCalledWith("how-to-save");
+    });
+
+    it("revalidates the persisted slug returned by updatePost", async () => {
+      authMock.mockResolvedValue({ user: { id: "admin-1", email: "a@b.c" } });
+      updatePostMock.mockResolvedValue({ id: "p1", slug: "how-to-save" });
+      const { updatePostAction } = await import("@/app/admin/actions");
+
+      await expect(
+        updatePostAction(
+          form({
+            id: "p1",
+            title: "How to save",
+            slug: "How To Save!",
+            excerpt: "Tips",
+            body: "## Hello",
+            status: "draft",
+          }),
+        ),
+      ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/posts$/);
+
+      expect(revalidateEditorialMock).toHaveBeenCalledWith("how-to-save");
+      expect(revalidateEditorialMock).not.toHaveBeenCalledWith("How To Save!");
     });
   });
 });

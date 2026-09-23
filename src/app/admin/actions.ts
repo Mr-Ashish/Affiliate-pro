@@ -19,6 +19,7 @@ const OFFER_STATUSES = new Set<OfferStatus>([
   "expired",
   "disabled",
 ]);
+const POST_STATUSES = new Set<PostStatus>(["draft", "published"]);
 
 async function requireAdmin() {
   const session = await auth();
@@ -104,9 +105,22 @@ function optionalText(value: FormDataEntryValue | null): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
+function assertHttpUrl(label: string, value: string | null): void {
+  if (!value) return;
+  if (!value.startsWith("http://") && !value.startsWith("https://")) {
+    throw new Error(`${label} must start with http:// or https://`);
+  }
+}
+
 function postFieldsFromForm(formData: FormData) {
   const statusRaw = String(formData.get("status") ?? "").trim();
-  const status: PostStatus = statusRaw.length > 0 ? (statusRaw as PostStatus) : "draft";
+  if (statusRaw.length > 0 && !POST_STATUSES.has(statusRaw as PostStatus)) {
+    throw new Error("status must be draft or published");
+  }
+  const status: PostStatus =
+    statusRaw.length > 0 ? (statusRaw as PostStatus) : "draft";
+  const heroImageUrl = optionalText(formData.get("heroImageUrl"));
+  assertHttpUrl("heroImageUrl", heroImageUrl);
   return {
     title: String(formData.get("title") ?? "").trim(),
     slug: String(formData.get("slug") ?? "").trim(),
@@ -116,7 +130,7 @@ function postFieldsFromForm(formData: FormData) {
     isFeatured: formData.get("isFeatured") === "on",
     seoTitle: optionalText(formData.get("seoTitle")),
     seoDescription: optionalText(formData.get("seoDescription")),
-    heroImageUrl: optionalText(formData.get("heroImageUrl")),
+    heroImageUrl,
     heroImageAlt: optionalText(formData.get("heroImageAlt")),
     merchantIds: formData
       .getAll("merchantIds")
@@ -128,12 +142,11 @@ function postFieldsFromForm(formData: FormData) {
 export async function createPostAction(formData: FormData) {
   await requireAdmin();
 
-  const fields = postFieldsFromForm(formData);
-
   let error: string | null = null;
   try {
-    await createPost(fields);
-    revalidateEditorial(fields.slug);
+    const fields = postFieldsFromForm(formData);
+    const post = await createPost(fields);
+    revalidateEditorial(post.slug);
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to create post";
   }
@@ -148,12 +161,12 @@ export async function updatePostAction(formData: FormData) {
   await requireAdmin();
 
   const id = String(formData.get("id") ?? "").trim();
-  const fields = postFieldsFromForm(formData);
 
   let error: string | null = null;
   try {
-    await updatePost({ id, ...fields });
-    revalidateEditorial(fields.slug);
+    const fields = postFieldsFromForm(formData);
+    const post = await updatePost({ id, ...fields });
+    revalidateEditorial(post.slug);
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to update post";
   }
