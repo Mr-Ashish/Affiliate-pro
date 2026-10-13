@@ -22,6 +22,7 @@
     "aws:push": "bash scripts/aws/build-push.sh",
     "aws:infra": "bash scripts/aws/infra-up.sh",
     "aws:infra:down": "bash scripts/aws/infra-down.sh",
+    "aws:seed": "bash scripts/aws/seed.sh",
     "dev:sync": "bash scripts/dev-hot-sync.sh",
     "monitor:db": "bash scripts/monitor-db.sh",
     "monitor:app": "bash scripts/monitor-app.sh",

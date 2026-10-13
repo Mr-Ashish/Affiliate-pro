@@ -6,6 +6,8 @@ export const PUBLIC_PAGE_REVALIDATE_SECONDS = 120;
 export function revalidatePublicCatalog(storeSlug?: string) {
   revalidatePath("/");
   revalidatePath("/stores");
+  revalidatePath("/deals");
+  revalidatePath("/trending");
   if (storeSlug) {
     revalidatePath(`/store/${storeSlug}`);
   }

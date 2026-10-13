@@ -12,7 +12,8 @@ task_cpu             = "256"
 task_memory          = "512"
 db_instance_class    = "db.t4g.micro"
 
-# Optional: your public /32 so migrate.sh can reach RDS from the laptop.
+# Optional SG hole only. Private RDS is still unreachable from the laptop.
+# migrate.sh uses a Fargate task — leave this empty.
 # operator_cidr = "203.0.113.10/32"
 
 # Set after you attach a custom domain to CloudFront.

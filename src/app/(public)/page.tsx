@@ -1,152 +1,129 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { BlogCard } from "@/components/public/BlogCard";
+import { BannerCarousel, type BannerSlide } from "@/components/public/BannerCarousel";
 import { DealCard } from "@/components/public/DealCard";
-import { HeroSearch } from "@/components/public/HeroSearch";
-import { OfferRow } from "@/components/public/OfferRow";
-import { PopularStores } from "@/components/public/PopularStores";
-import { listPopularMerchants } from "@/lib/catalog/merchants";
 import {
+  ExclusiveCodesList,
+  type ListOffer,
+} from "@/components/public/ExclusiveCodesList";
+import { MaterialIcon } from "@/components/public/MaterialIcon";
+import { SavingsTipsSection } from "@/components/public/SavingsTipsSection";
+import { TrendingDealsList } from "@/components/public/TrendingDealsList";
+import { listActiveBanners } from "@/lib/catalog/banners";
+import { bannerHref } from "@/lib/catalog/offer-display";
+import {
+  listExclusiveOffers,
   listFeaturedOffers,
-  listRecentOffers,
+  listTrendingOffers,
 } from "@/lib/catalog/offers";
-import { listPublishedPosts } from "@/lib/editorial/posts";
-import {
-  toDealCardViewModel,
-  toOfferRowViewModel,
-} from "@/lib/ui/view-models";
 import { catalogOrEmpty } from "@/lib/db-prerender";
+import { listPublishedPosts } from "@/lib/editorial/posts";
+import { toDealCardViewModel } from "@/lib/ui/view-models";
 
 const MARKET = "US";
-
-/** Must be a numeric literal for Next.js (see PUBLIC_PAGE_REVALIDATE_SECONDS). */
 export const revalidate = 120;
 
-export default async function HomePage() {
-  const [featured, recent, popular, featuredPosts] = await Promise.all([
-    catalogOrEmpty(() => listFeaturedOffers({ market: MARKET, limit: 6 }), []),
-    catalogOrEmpty(() => listRecentOffers({ market: MARKET, limit: 8 }), []),
-    catalogOrEmpty(
-      () => listPopularMerchants({ market: MARKET, limit: 12 }),
-      [],
-    ),
-    catalogOrEmpty(
-      () => listPublishedPosts({ limit: 3, featuredOnly: true }),
-      [],
-    ),
-  ]);
-  const blogPosts =
-    featuredPosts.length > 0
-      ? featuredPosts
-      : await catalogOrEmpty(() => listPublishedPosts({ limit: 3 }), []);
+const FEATURED_SUBTITLE =
+  "Top-performing coupon codes tested and approved by our shopping editors today.";
 
-  const featuredCards = featured.map((o) =>
-    toDealCardViewModel(o, o.merchant),
-  );
-  const recentRows = recent.map((o) => toOfferRowViewModel(o, o.merchant));
+function mapBannersToSlides(
+  banners: Awaited<ReturnType<typeof listActiveBanners>>,
+): BannerSlide[] {
+  return banners.map((banner) => {
+    const href = bannerHref({
+      linkType: banner.linkType as "offer" | "store",
+      offerId: banner.offerId,
+      merchantSlug: banner.merchant?.slug ?? null,
+    });
+    const goHref =
+      banner.linkType === "offer" && banner.offer ? `/go/${banner.offer.id}` : null;
+    return {
+      id: banner.id,
+      title: banner.title,
+      subtitle: banner.subtitle,
+      imageUrl: banner.imageUrl,
+      ctaLabel: banner.ctaLabel,
+      isSponsored: banner.isSponsored,
+      isExclusive: banner.offer?.isExclusive ?? false,
+      href: goHref ? null : href,
+      code: banner.offer?.code ?? null,
+      goHref,
+    };
+  });
+}
+
+type OfferWithMerchant = Awaited<ReturnType<typeof listExclusiveOffers>>[number];
+
+function mapOfferToListOffer(offer: OfferWithMerchant): ListOffer {
+  const vm = toDealCardViewModel(offer, offer.merchant);
+  return {
+    id: offer.id,
+    title: offer.title,
+    code: offer.code ?? null,
+    goHref: `/go/${offer.id}`,
+    discountLabel: vm.discountLabel,
+    verifiedAt: vm.verifiedAt,
+    merchantName: offer.merchant.name,
+    merchantLogoUrl: offer.merchant.logoUrl ?? null,
+  };
+}
+
+export default async function HomePage() {
+  const [featured, exclusive, trending, posts, banners] = await Promise.all([
+    catalogOrEmpty(() => listFeaturedOffers({ market: MARKET, limit: 3 }), []),
+    catalogOrEmpty(() => listExclusiveOffers({ market: MARKET, limit: 5 }), []),
+    catalogOrEmpty(() => listTrendingOffers({ market: MARKET, limit: 5 }), []),
+    catalogOrEmpty(() => listPublishedPosts({ limit: 4 }), []),
+    catalogOrEmpty(() => listActiveBanners({ market: MARKET }), []),
+  ]);
+
+  const featuredCards = featured.map((offer) => toDealCardViewModel(offer, offer.merchant));
+  const exclusiveList = exclusive.map(mapOfferToListOffer);
+  const trendingList = trending.map(mapOfferToListOffer);
+  const bannerSlides = mapBannersToSlides(banners);
 
   return (
     <main>
-      <Container className="space-y-16 py-10 md:py-14">
-        <HeroSearch />
+      <Container className="space-y-10 py-10 md:py-14">
+        <BannerCarousel slides={bannerSlides} />
 
-        <section aria-labelledby="featured-heading">
-          <div className="mb-6 flex items-end justify-between gap-4">
-            <h2
-              id="featured-heading"
-              className="text-2xl font-bold text-on-surface"
-            >
-              Featured Deals
-            </h2>
-            <Link
-              href="/stores"
-              className="text-sm font-semibold text-primary hover:underline"
-            >
-              View all stores
-            </Link>
-          </div>
-          {featuredCards.length === 0 ? (
-            <p className="text-sm text-on-surface-variant">
-              No featured deals yet. Browse stores for the latest offers.
-            </p>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {featuredCards.length > 0 ? (
+          <section aria-labelledby="featured-heading">
+            <div className="mb-4 flex flex-col gap-2 border-b border-[#E2E8F0] pb-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <MaterialIcon name="verified" filled size={26} className="text-[#059669]" />
+                  <h2
+                    id="featured-heading"
+                    className="font-display text-xl font-bold text-[#0F172A] md:text-2xl"
+                  >
+                    Top Verified Coupons &amp; Promo Codes
+                  </h2>
+                </div>
+                <p className="mt-0.5 text-sm text-[#64748B]">{FEATURED_SUBTITLE}</p>
+              </div>
+              <Link
+                href="/deals"
+                className="inline-flex items-center gap-1 self-start text-[13px] font-bold text-[#047857] hover:text-[#065F46] hover:underline sm:self-auto"
+              >
+                View all
+                <MaterialIcon name="arrow_forward" size={16} />
+              </Link>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {featuredCards.map((deal) => (
                 <DealCard key={deal.id} deal={deal} />
               ))}
             </div>
-          )}
-        </section>
-
-        <section aria-labelledby="popular-heading">
-          <h2
-            id="popular-heading"
-            className="mb-6 text-2xl font-bold text-on-surface"
-          >
-            Popular Stores
-          </h2>
-          <PopularStores
-            stores={popular.map((m) => ({
-              name: m.name,
-              slug: m.slug,
-              logoUrl: m.logoUrl,
-              offerCount: m.offerCount,
-            }))}
-          />
-        </section>
-
-        <section aria-labelledby="recent-heading">
-          <h2
-            id="recent-heading"
-            className="mb-2 text-2xl font-bold text-on-surface"
-          >
-            Recent Offers
-          </h2>
-          {recentRows.length === 0 ? (
-            <p className="text-sm text-on-surface-variant">
-              No recent offers yet.
-            </p>
-          ) : (
-            <ul className="rounded-lg border border-outline-variant/60 bg-surface-lowest px-5">
-              {recentRows.map((offer) => (
-                <OfferRow key={offer.id} offer={offer} />
-              ))}
-            </ul>
-          )}
-        </section>
-
-        {blogPosts.length > 0 ? (
-          <section aria-labelledby="blog-heading">
-            <div className="mb-6 flex items-end justify-between gap-4">
-              <h2
-                id="blog-heading"
-                className="text-2xl font-bold text-on-surface"
-              >
-                From the blog
-              </h2>
-              <Link
-                href="/blog"
-                className="text-sm font-semibold text-primary hover:underline"
-              >
-                View all
-              </Link>
-            </div>
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {blogPosts.map((post) => (
-                <li key={post.id}>
-                  <BlogCard
-                    title={post.title}
-                    slug={post.slug}
-                    excerpt={post.excerpt}
-                    publishedAt={post.publishedAt}
-                    author={post.author}
-                    hero={post.hero}
-                  />
-                </li>
-              ))}
-            </ul>
           </section>
         ) : null}
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <ExclusiveCodesList offers={exclusiveList} />
+          <TrendingDealsList offers={trendingList} />
+        </div>
+
+        <SavingsTipsSection posts={posts} />
       </Container>
     </main>
   );

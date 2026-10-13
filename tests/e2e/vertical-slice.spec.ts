@@ -61,11 +61,21 @@ test.describe("vertical slice", () => {
       page.getByRole("heading", { name: merchantName, level: 1 }),
     ).toBeVisible();
     await expect(page.getByText(offerTitle)).toBeVisible();
-    await expect(page.getByText(code)).toBeVisible();
+    await expect(page.getByText(code)).toHaveCount(0);
 
-    const goLink = page.getByRole("link", { name: "Get Code" });
-    await expect(goLink).toBeVisible();
-    const href = await goLink.getAttribute("href");
+    await page.evaluate(() => {
+      const w = window as unknown as { __opened: string[] };
+      w.__opened = [];
+      window.open = (url) => {
+        w.__opened.push(String(url));
+        return null;
+      };
+    });
+    await page.getByRole("button", { name: "Get Code" }).click();
+    await expect(page.getByText(code)).toBeVisible();
+    const href = await page.evaluate(
+      () => (window as unknown as { __opened: string[] }).__opened[0],
+    );
     expect(href).toMatch(/^\/go\/[0-9a-f-]+$/i);
     const offerId = href!.slice("/go/".length);
 

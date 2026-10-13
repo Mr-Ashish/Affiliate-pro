@@ -89,6 +89,10 @@ export default async function AdminNewPostPage({
               <option value="published">published</option>
             </Select>
           </div>
+          <div className="space-y-1">
+            <label htmlFor="category" className="text-sm font-medium">Category</label>
+            <Input id="category" name="category" type="text" placeholder="Shopping Guides" />
+          </div>
           <div className="flex items-center gap-2">
             <input id="isFeatured" name="isFeatured" type="checkbox" />
             <label htmlFor="isFeatured" className="text-sm font-medium">

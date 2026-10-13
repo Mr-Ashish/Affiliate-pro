@@ -22,18 +22,18 @@ export function PopularStores({ stores }: PopularStoresProps) {
   }
 
   return (
-    <ul className="flex flex-wrap gap-3">
+    <ul className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-2 [scrollbar-width:thin]">
       {stores.map((s) => (
-        <li key={s.slug}>
+        <li key={s.slug} className="shrink-0">
           <Link
             href={`/store/${s.slug}`}
-            className="inline-flex items-center gap-2 rounded-full border border-outline-variant/60 bg-surface-lowest px-3 py-2 text-sm font-semibold text-on-surface shadow-[var(--shadow-card)] transition hover:border-primary/40 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white py-1.5 pl-1.5 pr-4 text-sm font-semibold text-[#0F172A] shadow-[var(--shadow-card)] transition hover:border-[#10B981]/50 hover:text-[#059669] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#10B981]/20"
           >
-            <MerchantAvatar name={s.name} logoUrl={s.logoUrl} size="sm" />
-            {s.name}
+            <MerchantAvatar name={s.name} logoUrl={s.logoUrl} className="h-7 w-7 text-[10px]" />
+            <span className="whitespace-nowrap">{s.name}</span>
             {typeof s.offerCount === "number" ? (
-              <span className="text-xs font-normal text-on-surface-variant">
-                {s.offerCount}
+              <span className="whitespace-nowrap text-xs font-semibold text-[#059669]">
+                {s.offerCount} {s.offerCount === 1 ? "Offer" : "Offers"}
               </span>
             ) : null}
           </Link>

@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 /**
  * Editorial blog vertical slice smoke:
- * admin login → publish post → /blog/[slug] → home “From the blog” → /blog index
+ * admin login → publish post → /blog/[slug] → home “Savings Tips” → /blog index
  *
  * Prerequisites: Postgres migrated + seeded, app on baseURL (webServer or reuse).
  * Defaults match .env.example: admin@example.com / changeme
@@ -45,7 +45,7 @@ test.describe("blog vertical slice", () => {
 
     await page.goto("/");
     await expect(
-      page.getByRole("heading", { name: "From the blog" }),
+      page.getByRole("heading", { name: "Savings Tips" }),
     ).toBeVisible();
     await expect(page.getByRole("link", { name: title })).toBeVisible();
 

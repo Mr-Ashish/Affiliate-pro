@@ -17,6 +17,7 @@ export type CreatePostInput = {
   heroImageUrl?: string | null;
   heroImageAlt?: string | null;
   merchantIds?: string[];
+  category?: string | null;
 };
 
 export type UpdatePostInput = CreatePostInput & { id: string };

@@ -22,6 +22,7 @@ export async function createMerchant(input: CreateMerchantInput) {
         siteUrl,
         logoUrl: input.logoUrl ?? null,
         description: input.description ?? null,
+        defaultOfferImageUrl: input.defaultOfferImageUrl ?? null,
         isActive: input.isActive ?? true,
       },
     });
@@ -66,6 +67,14 @@ export async function getMerchantSlugById(
 export async function listMerchants() {
   return prisma.merchant.findMany({
     orderBy: { createdAt: "desc" },
+  });
+}
+
+/** Public: count of active merchants in a market. */
+export async function countActiveMerchants(params: { market: string }) {
+  const market = params.market.trim();
+  return prisma.merchant.count({
+    where: { market, isActive: true },
   });
 }
 
@@ -168,5 +177,35 @@ export async function listMerchantsWithOfferCounts() {
   return rows.map((m) => ({
     ...m,
     offerCount: m._count.offers,
+  }));
+}
+
+export async function listDirectoryMerchants(params: {
+  market: string;
+  q?: string;
+}) {
+  const market = params.market.trim();
+  const q = params.q?.trim();
+  const rows = await prisma.merchant.findMany({
+    where: {
+      market,
+      isActive: true,
+      ...(q
+        ? {
+            OR: [
+              { name: { contains: q, mode: "insensitive" } },
+              { slug: { contains: q, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    },
+    orderBy: { name: "asc" },
+    include: {
+      _count: { select: { offers: { where: { status: "active" } } } },
+    },
+  });
+  return rows.map((merchant) => ({
+    ...merchant,
+    offerCount: merchant._count.offers,
   }));
 }

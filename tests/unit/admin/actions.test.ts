@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const authMock = vi.fn();
 const createMerchantMock = vi.fn();
 const createManualOfferMock = vi.fn();
+const updateOfferStatusMock = vi.fn();
 const redirectMock = vi.fn((url: string) => {
   const err = new Error(`NEXT_REDIRECT:${url}`);
   (err as Error & { digest: string }).digest = `NEXT_REDIRECT;replace;${url};303;`;
@@ -22,6 +23,7 @@ vi.mock("@/lib/catalog/merchants", () => ({
 
 vi.mock("@/lib/catalog/offers", () => ({
   createManualOffer: (...args: unknown[]) => createManualOfferMock(...args),
+  updateOfferStatus: (...args: unknown[]) => updateOfferStatusMock(...args),
 }));
 
 vi.mock("next/navigation", () => ({
@@ -46,6 +48,7 @@ describe("admin server actions", () => {
     authMock.mockReset();
     createMerchantMock.mockReset();
     createManualOfferMock.mockReset();
+    updateOfferStatusMock.mockReset();
     getMerchantSlugByIdMock.mockReset();
     getMerchantSlugByIdMock.mockResolvedValue("nike");
     redirectMock.mockClear();
@@ -84,12 +87,14 @@ describe("admin server actions", () => {
         ),
       ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/merchants$/);
 
-      expect(createMerchantMock).toHaveBeenCalledWith({
-        market: "US",
-        slug: "nike",
-        name: "Nike",
-        siteUrl: "https://nike.com",
-      });
+      expect(createMerchantMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          market: "US",
+          slug: "nike",
+          name: "Nike",
+          siteUrl: "https://nike.com",
+        }),
+      );
     });
 
     it("defaults market to US and redirects with error on failure", async () => {
@@ -150,14 +155,16 @@ describe("admin server actions", () => {
         ),
       ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/offers$/);
 
-      expect(createManualOfferMock).toHaveBeenCalledWith({
-        merchantId: "m1",
-        title: "10% off",
-        offerType: "coupon",
-        code: "SAVE10",
-        affiliateUrl: "https://aff.example/1",
-        status: "active",
-      });
+      expect(createManualOfferMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          merchantId: "m1",
+          title: "10% off",
+          offerType: "coupon",
+          code: "SAVE10",
+          affiliateUrl: "https://aff.example/1",
+          status: "active",
+        }),
+      );
     });
 
     it("treats empty code as null", async () => {
@@ -181,6 +188,37 @@ describe("admin server actions", () => {
       expect(createManualOfferMock).toHaveBeenCalledWith(
         expect.objectContaining({ code: null, offerType: "deal" }),
       );
+    });
+  });
+
+  describe("updateOfferStatusAction", () => {
+    it("rejects unauthenticated callers", async () => {
+      authMock.mockResolvedValue(null);
+      const { updateOfferStatusAction } = await import("@/app/admin/actions");
+      await expect(
+        updateOfferStatusAction(
+          form({ offerId: "o1", status: "disabled" }),
+        ),
+      ).rejects.toThrow(/Unauthorized/);
+      expect(updateOfferStatusMock).not.toHaveBeenCalled();
+    });
+
+    it("disables an offer and redirects to the list", async () => {
+      authMock.mockResolvedValue({ user: { id: "admin-1", email: "a@b.c" } });
+      updateOfferStatusMock.mockResolvedValue({
+        id: "o1",
+        merchantId: "m1",
+        status: "disabled",
+      });
+      const { updateOfferStatusAction } = await import("@/app/admin/actions");
+
+      await expect(
+        updateOfferStatusAction(
+          form({ offerId: "o1", status: "disabled" }),
+        ),
+      ).rejects.toThrow(/NEXT_REDIRECT:\/admin\/offers$/);
+
+      expect(updateOfferStatusMock).toHaveBeenCalledWith("o1", "disabled");
     });
   });
 });

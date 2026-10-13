@@ -35,15 +35,22 @@ resource "aws_ecs_task_definition" "web" {
       hostPort      = 3000
       protocol      = "tcp"
     }]
-    environment = concat(
-      [
-        { name = "NODE_ENV", value = "production" },
-        { name = "PORT", value = "3000" },
-        { name = "HOSTNAME", value = "0.0.0.0" },
-        { name = "AUTH_TRUST_HOST", value = "true" },
-      ],
-      var.public_base_url != "" ? [{ name = "AUTH_URL", value = var.public_base_url }] : [],
-    )
+    environment = [
+      { name = "NODE_ENV", value = "production" },
+      { name = "PORT", value = "3000" },
+      { name = "HOSTNAME", value = "0.0.0.0" },
+      { name = "AUTH_TRUST_HOST", value = "true" },
+      # Always the public URL. Empty public_base_url used to omit AUTH_URL, so
+      # Auth.js trusted x-forwarded-host (the ALB) and login redirected off CloudFront.
+      {
+        name = "AUTH_URL"
+        value = (
+          var.public_base_url != ""
+          ? var.public_base_url
+          : "https://${aws_cloudfront_distribution.web.domain_name}"
+        )
+      },
+    ]
     secrets = [
       { name = "DATABASE_URL", valueFrom = aws_secretsmanager_secret.database_url.arn },
       { name = "AUTH_SECRET", valueFrom = aws_secretsmanager_secret.auth_secret.arn },
@@ -62,6 +69,46 @@ resource "aws_ecs_task_definition" "web" {
       timeout     = 5
       retries     = 3
       startPeriod = 40
+    }
+  }])
+}
+
+resource "aws_cloudwatch_log_group" "migrate" {
+  name              = "/ecs/${local.name}-migrate"
+  retention_in_days = 7
+}
+
+resource "aws_ecs_task_definition" "migrate" {
+  family                   = "${local.name}-migrate"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = "256"
+  memory                   = "512"
+  execution_role_arn       = aws_iam_role.exec.arn
+  task_role_arn            = aws_iam_role.task.arn
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+
+  container_definitions = jsonencode([{
+    name      = "migrate"
+    image     = "${aws_ecr_repository.app.repository_url}:${var.container_image_tag}-migrate"
+    essential = true
+    environment = [
+      { name = "NODE_ENV", value = "production" },
+    ]
+    secrets = [
+      { name = "DATABASE_URL", valueFrom = aws_secretsmanager_secret.database_url.arn },
+    ]
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        awslogs-group         = aws_cloudwatch_log_group.migrate.name
+        awslogs-region        = var.aws_region
+        awslogs-stream-prefix = "migrate"
+      }
     }
   }])
 }

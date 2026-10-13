@@ -2,6 +2,8 @@ export type OfferType = "coupon" | "deal" | "sale";
 
 export type OfferStatus = "draft" | "active" | "expired" | "disabled";
 
+export type OfferChannel = "online" | "in_store" | "both";
+
 export type CreateMerchantInput = {
   market: string;
   slug: string;
@@ -9,6 +11,7 @@ export type CreateMerchantInput = {
   siteUrl: string;
   logoUrl?: string | null;
   description?: string | null;
+  defaultOfferImageUrl?: string | null;
   isActive?: boolean;
 };
 
@@ -27,6 +30,8 @@ export type CreateManualOfferInput = {
   isExclusive?: boolean;
   discountLabel?: string | null;
   imageUrl?: string | null;
+  channel?: OfferChannel | null;
+  verifiedAt?: Date | null;
 };
 
 export type ListActiveOffersInput = {

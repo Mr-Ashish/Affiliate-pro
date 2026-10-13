@@ -102,6 +102,35 @@ export default async function AdminNewOfferPage({
               />
             </div>
             <div className="space-y-1">
+              <label htmlFor="description" className="text-sm font-medium">
+                Description
+              </label>
+              <Input id="description" name="description" type="text" />
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="discountLabel" className="text-sm font-medium">Discount label</label>
+              <Input id="discountLabel" name="discountLabel" type="text" placeholder="10% OFF" />
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="imageUrl" className="text-sm font-medium">Image URL</label>
+              <Input id="imageUrl" name="imageUrl" type="url" placeholder="https://…" />
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="channel" className="text-sm font-medium">Channel</label>
+              <Select id="channel" name="channel" defaultValue="">
+                <option value="">—</option>
+                <option value="online">online</option>
+                <option value="in_store">in store</option>
+                <option value="both">both</option>
+              </Select>
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="terms" className="text-sm font-medium">Terms</label>
+              <Input id="terms" name="terms" type="text" />
+            </div>
+            <label className="flex items-center gap-2 text-sm"><input name="isFeatured" type="checkbox" /> Featured</label>
+            <label className="flex items-center gap-2 text-sm"><input name="isExclusive" type="checkbox" /> Exclusive</label>
+            <div className="space-y-1">
               <label htmlFor="status" className="text-sm font-medium">
                 Status
               </label>

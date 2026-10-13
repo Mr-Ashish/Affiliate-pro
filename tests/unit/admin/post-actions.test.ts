@@ -127,6 +127,7 @@ describe("admin post server actions", () => {
         seoDescription: "Desc",
         heroImageUrl: "https://img.example/h.jpg",
         heroImageAlt: "Hero",
+        category: null,
         merchantIds: ["m1", "m2"],
       });
       expect(revalidateEditorialMock).toHaveBeenCalledWith("how-to-save");

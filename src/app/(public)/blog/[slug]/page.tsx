@@ -10,6 +10,7 @@ import {
   listPublishedPosts,
 } from "@/lib/editorial/posts";
 import { getPublicBaseUrl } from "@/lib/editorial/public-base-url";
+import { estimateReadMinutes } from "@/lib/editorial/read-time";
 import { renderPostBody } from "@/lib/editorial/render-body";
 import type { BodyFormat } from "@/lib/editorial/types";
 
@@ -100,6 +101,8 @@ export default async function BlogPostPage({ params }: Props) {
         <p className="text-sm text-on-surface-variant">
           {post.author.name}
           {dateLabel ? ` · ${dateLabel}` : null}
+          {` · ${estimateReadMinutes(post.body)} min read`}
+          {post.category ? ` · ${post.category}` : ""}
         </p>
 
         {post.hero ? (
@@ -124,7 +127,7 @@ export default async function BlogPostPage({ params }: Props) {
               id="related-merchants-heading"
               className="text-xl font-bold text-on-surface"
             >
-              Related merchants
+              Popular retailer guides
             </h2>
             <ul className="mt-3 list-disc pl-5">
               {post.merchants.map((merchant) => (

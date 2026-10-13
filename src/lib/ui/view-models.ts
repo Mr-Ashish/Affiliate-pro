@@ -1,3 +1,4 @@
+import { channelLabel, resolveOfferImageUrl } from "@/lib/catalog/offer-display";
 import { isEndingSoon } from "@/lib/ui/ending-soon";
 import type { BadgeTone } from "@/components/ui/Badge";
 
@@ -14,6 +15,9 @@ export type OfferLike = {
   discountLabel?: string | null;
   verifiedAt?: Date | string | null;
   clickCount?: number;
+  imageUrl?: string | null;
+  terms?: string | null;
+  channel?: string | null;
 };
 
 export type MerchantLike = {
@@ -23,6 +27,7 @@ export type MerchantLike = {
   market?: string;
   logoUrl?: string | null;
   description?: string | null;
+  defaultOfferImageUrl?: string | null;
   siteUrl?: string;
 };
 
@@ -39,6 +44,11 @@ export type DealCardViewModel = {
   badges: { label: string; tone: BadgeTone }[];
   verifiedAt: Date | null;
   discountLabel: string | null;
+  imageUrl: string;
+  terms: string | null;
+  channelLabel: string | null;
+  clickCount: number;
+  offerType: string;
 };
 
 export type OfferRowViewModel = {
@@ -99,6 +109,11 @@ export function toDealCardViewModel(
     badges: offerBadges(offer, now),
     verifiedAt: parseDate(offer.verifiedAt),
     discountLabel: offer.discountLabel ?? null,
+    imageUrl: resolveOfferImageUrl(offer.imageUrl, merchant.defaultOfferImageUrl),
+    terms: offer.terms ?? null,
+    channelLabel: channelLabel(offer.channel),
+    clickCount: offer.clickCount ?? 0,
+    offerType: offer.offerType,
   };
 }
 

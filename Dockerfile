@@ -26,6 +26,8 @@ ARG AUTH_SECRET="build-time-placeholder-not-used-at-runtime"
 ENV DATABASE_URL=$DATABASE_URL
 ENV AUTH_SECRET=$AUTH_SECRET
 ENV AUTH_TRUST_HOST="true"
+# ISR home/store pages query Prisma at build time; there is no DB in the image.
+ENV SKIP_DB_PRERENDER="1"
 RUN pnpm exec prisma generate
 RUN pnpm build
 
@@ -48,12 +50,14 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD wget -qO- http://127.0.0.1:3000/api/health || exit 1
 CMD ["node", "server.js"]
 
-# One-shot: prisma migrate deploy (same repo, larger image)
+# One-shot: prisma migrate deploy (override command for in-VPC seed)
 FROM base AS migrate
 ENV NODE_ENV=production
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
+COPY --from=builder /app/tsconfig.json ./
+COPY --from=builder /app/src/lib ./src/lib
 USER node
 CMD ["pnpm", "exec", "prisma", "migrate", "deploy"]

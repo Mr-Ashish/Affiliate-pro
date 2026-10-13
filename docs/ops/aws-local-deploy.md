@@ -47,7 +47,7 @@ That creates VPC, ECR, RDS (private), secrets, ALB, CloudFront PriceClass_100, a
 
 Tear down: `bash scripts/aws/infra-down.sh`.
 
-To reach RDS from this Mac for `migrate.sh`, set `operator_cidr = "YOUR.IP.V4/32"` in `terraform.tfvars` and re-apply. Remove it when you are done. Do not make RDS public.
+RDS stays private. `migrate.sh` runs `prisma migrate deploy` as a one-off Fargate task in the VPC. `operator_cidr` does **not** make the laptop reach a private instance. Do not set `publicly_accessible = true`.
 
 ---
 
@@ -74,6 +74,7 @@ Pieces if you want them separate:
 ```bash
 bash scripts/aws/build-push.sh staging
 bash scripts/aws/migrate.sh staging
+bash scripts/aws/seed.sh staging          # demo catalog; never on prod
 bash scripts/aws/deploy-web.sh staging
 SMOKE_STORE_SLUG=nike pnpm smoke https://staging.example.com
 ```
@@ -102,7 +103,7 @@ No `iam:CreateOpenIDConnectProvider`. No GitHub.
 3. Merge `.env.aws.generated` → `.env.aws`
 4. `bash scripts/aws/build-push.sh staging`
 5. Set `enable_web_service = true`, `infra-up.sh` again
-6. `bash scripts/aws/migrate.sh staging` (needs `operator_cidr` or SSM)
+6. `bash scripts/aws/migrate.sh staging` (Fargate one-off; needs `ECS_MIGRATE_TASK_FAMILY`, `ECS_SUBNETS`, `ECS_WEB_SG`)
 7. `pnpm smoke <cloudfront_url>` from Terraform output
 
 After that, `bash scripts/aws/release.sh staging` is the loop (new code only).  

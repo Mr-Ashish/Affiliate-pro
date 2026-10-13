@@ -38,6 +38,12 @@ export function shouldSeedDemo(
   return TRUTHY.has(raw);
 }
 
+/** Demo catalog is staging/local only. Prod seed stays market + admin. */
+export function shouldAllowDemoSeed(envName: string): boolean {
+  const name = envName.trim().toLowerCase();
+  return name !== "prod" && name !== "production";
+}
+
 export const DEMO_MERCHANTS: DemoMerchant[] = [
   {
     market: "US",

@@ -78,13 +78,13 @@ variable "container_image_tag" {
 
 variable "public_base_url" {
   type        = string
-  description = "Public site URL (https://staging.example.com). Empty = AUTH_TRUST_HOST only."
+  description = "Optional custom public URL (https://staging.example.com). Empty uses the CloudFront URL as AUTH_URL."
   default     = ""
 }
 
 variable "operator_cidr" {
   type        = string
-  description = "Optional /32 to allow laptop migrate.sh into RDS. Empty = no hole."
+  description = "Optional /32 SG hole on RDS. Does not make a private instance reachable from the internet. Leave empty; migrate runs in Fargate."
   default     = ""
 }
 

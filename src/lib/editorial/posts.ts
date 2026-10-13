@@ -52,6 +52,7 @@ export type PostCard = {
   author: PostAuthor;
   hero: PostHero;
   merchants: PostMerchantSummary[];
+  category: string | null;
 };
 
 export type PublishedPost = PostCard & {
@@ -77,6 +78,7 @@ function mapPost(row: PostCardRow): PostCard {
       ? { url: heroJoin.media.url, alt: heroJoin.media.alt }
       : null,
     merchants: row.merchants.map((pm) => pm.merchant),
+    category: row.category,
   };
 }
 
@@ -259,6 +261,7 @@ export async function createPost(input: CreatePostInput): Promise<PostCard> {
           seoTitle: normalizeOptionalText(input.seoTitle) ?? null,
           seoDescription: normalizeOptionalText(input.seoDescription) ?? null,
           authorId,
+          category: normalizeOptionalText(input.category) ?? null,
           publishedAt: status === "published" ? now : null,
         },
       });
@@ -320,6 +323,10 @@ export async function updatePost(input: UpdatePostInput): Promise<PostCard> {
               ? existing.seoDescription
               : (normalizeOptionalText(input.seoDescription) ?? null),
           authorId,
+          category:
+            input.category === undefined
+              ? existing.category
+              : (normalizeOptionalText(input.category) ?? null),
           publishedAt,
         },
       });
@@ -344,12 +351,25 @@ export async function listPublishedPosts(params?: {
   limit?: number;
   featuredOnly?: boolean;
   now?: Date;
+  q?: string;
+  category?: string;
 }): Promise<PostCard[]> {
   const now = params?.now ?? new Date();
+  const q = params?.q?.trim();
+  const category = params?.category?.trim();
   const rows = await prisma.post.findMany({
     where: {
       ...publishedWhere(now),
       ...(params?.featuredOnly ? { isFeatured: true } : {}),
+      ...(category ? { category } : {}),
+      ...(q
+        ? {
+            OR: [
+              { title: { contains: q, mode: "insensitive" } },
+              { excerpt: { contains: q, mode: "insensitive" } },
+            ],
+          }
+        : {}),
     },
     orderBy: { publishedAt: "desc" },
     take: params?.limit,
@@ -394,4 +414,17 @@ export async function listPublishedPostsForMerchant(
     include: postCardInclude,
   });
   return rows.map(mapPost);
+}
+
+export async function listPublishedCategories(now?: Date): Promise<string[]> {
+  const rows = await prisma.post.findMany({
+    where: {
+      ...publishedWhere(now ?? new Date()),
+      category: { not: null },
+    },
+    select: { category: true },
+    distinct: ["category"],
+    orderBy: { category: "asc" },
+  });
+  return rows.flatMap((row) => (row.category ? [row.category] : []));
 }

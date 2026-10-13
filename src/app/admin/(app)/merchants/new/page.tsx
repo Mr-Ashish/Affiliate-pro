@@ -69,6 +69,18 @@ export default async function AdminNewMerchantPage({
             />
           </div>
           <div className="space-y-1">
+            <label htmlFor="logoUrl" className="text-sm font-medium">Logo URL</label>
+            <Input id="logoUrl" name="logoUrl" type="url" placeholder="https://…" />
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="description" className="text-sm font-medium">Description</label>
+            <Input id="description" name="description" type="text" />
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="defaultOfferImageUrl" className="text-sm font-medium">Default offer image</label>
+            <Input id="defaultOfferImageUrl" name="defaultOfferImageUrl" type="url" placeholder="https://…" />
+          </div>
+          <div className="space-y-1">
             <label htmlFor="market" className="text-sm font-medium">
               Market
             </label>

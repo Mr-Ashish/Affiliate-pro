@@ -16,7 +16,7 @@ No GitHub OIDC. Apply from your laptop after `aws sso login`.
 ```bash
 aws sso login --profile coupon-hub
 cd infra/terraform
-cp staging.tfvars.example terraform.tfvars   # edit operator_cidr if you want laptop migrate
+cp staging.tfvars.example terraform.tfvars   # leave operator_cidr empty
 terraform init
 terraform apply                              # enable_web_service = false on first run
 ```
@@ -35,7 +35,7 @@ Then:
 bash scripts/aws/build-push.sh staging
 # set enable_web_service = true in terraform.tfvars
 bash scripts/aws/infra-up.sh
-bash scripts/aws/migrate.sh staging          # needs operator_cidr or SSM
+bash scripts/aws/migrate.sh staging          # Fargate one-off in the VPC
 pnpm smoke "$(terraform -chdir=infra/terraform output -raw cloudfront_url)"
 ```
 
