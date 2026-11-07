@@ -3,6 +3,8 @@ import {
   LayoutDashboard,
   Store,
   Tags,
+  Newspaper,
+  Image as ImageIcon,
   Ticket,
   MousePointerClick,
   Plus,
@@ -34,6 +36,8 @@ const nav: NavItem[] = [
     icon: Tags,
     disabled: true,
   },
+  { href: "/admin/posts", label: "Posts", icon: Newspaper },
+  { href: "/admin/banners", label: "Banners", icon: ImageIcon },
   { href: "/admin/offers", label: "Offers", icon: Ticket },
   {
     href: "/admin/clicks",

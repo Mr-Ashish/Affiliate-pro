@@ -43,3 +43,41 @@ code,
 .font-code {
   font-family: var(--font-jetbrains), ui-monospace, monospace;
 }
+
+.public-theme {
+  --primary: #006c49;
+  --primary-action: #10b981;
+  --primary-hover: #059669;
+  --on-primary: #ffffff;
+  --secondary-action: #0f172a;
+  --on-surface: #0f172a;
+  --on-surface-variant: #64748b;
+  --background: #f8fafc;
+  --surface-container-lowest: #ffffff;
+  --mint-wash: #ecfdf5;
+  --urgency: #f59e0b;
+  --border-default: #e2e8f0;
+  --hero-navy: #0b1528;
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --shadow-card-hover: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.04);
+  --radius-card: 1rem;
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.public-theme .font-display,
+.public-theme h1,
+.public-theme h2,
+.public-theme h3 {
+  font-family: var(--font-jakarta), var(--font-inter), sans-serif;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  vertical-align: middle;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}

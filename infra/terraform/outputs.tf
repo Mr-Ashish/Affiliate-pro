@@ -7,6 +7,18 @@ output "ecs_cluster_name" {
   value = aws_ecs_cluster.this.name
 }
 
+output "ecs_migrate_task_family" {
+  value = aws_ecs_task_definition.migrate.family
+}
+
+output "ecs_public_subnet_ids" {
+  value = join(",", aws_subnet.public[*].id)
+}
+
+output "ecs_web_security_group_id" {
+  value = aws_security_group.web.id
+}
+
 output "ecs_service_name" {
   value       = var.enable_web_service ? aws_ecs_service.web[0].name : null
   description = "Null until enable_web_service=true"
@@ -50,5 +62,8 @@ output "env_aws_snippet" {
     WEB_COMPUTE=ecs
     ECS_CLUSTER=${aws_ecs_cluster.this.name}
     ECS_SERVICE_STAGING=${local.name}-web
+    ECS_MIGRATE_TASK_FAMILY=${aws_ecs_task_definition.migrate.family}
+    ECS_SUBNETS=${join(",", aws_subnet.public[*].id)}
+    ECS_WEB_SG=${aws_security_group.web.id}
   EOT
 }

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   DEMO_MERCHANTS,
   DEMO_OFFERS,
+  shouldAllowDemoSeed,
   shouldSeedDemo,
 } from "@/lib/catalog/seed-demo";
 
@@ -35,6 +36,20 @@ describe("shouldSeedDemo", () => {
     expect(shouldSeedDemo(["node", "seed.ts"], { SEED_DEMO: "false" })).toBe(
       false,
     );
+  });
+});
+
+describe("shouldAllowDemoSeed", () => {
+  it("allows demo catalog on local and staging", () => {
+    expect(shouldAllowDemoSeed("local")).toBe(true);
+    expect(shouldAllowDemoSeed("staging")).toBe(true);
+    expect(shouldAllowDemoSeed("")).toBe(true);
+  });
+
+  it("forbids demo catalog on production", () => {
+    expect(shouldAllowDemoSeed("prod")).toBe(false);
+    expect(shouldAllowDemoSeed("production")).toBe(false);
+    expect(shouldAllowDemoSeed("PROD")).toBe(false);
   });
 });
 

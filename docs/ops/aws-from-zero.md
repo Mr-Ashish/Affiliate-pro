@@ -98,13 +98,7 @@ aws sts get-caller-identity --profile coupon-hub
 
 You must see your **Account** number and `coupon-hub-admin`. If this fails, stop — nothing else will work.
 
-Get your public IP (for database migrate from this Mac):
-
-```bash
-curl -s https://checkip.amazonaws.com
-```
-
-You’ll get something like `203.0.113.10`. Remember it as `YOUR_IP`.
+RDS is **private** (`publicly_accessible = false`). Prisma on this Mac cannot reach it. Schema changes run as a one-off Fargate task in the VPC — do not open the database to the internet.
 
 ---
 
@@ -115,7 +109,7 @@ cd /Users/ashishmishra/Documents/affiliate
 cp infra/terraform/staging.tfvars.example infra/terraform/terraform.tfvars
 ```
 
-Edit `infra/terraform/terraform.tfvars` in any editor. It should look like this (use **your** IP):
+Edit `infra/terraform/terraform.tfvars` in any editor. It should look like this:
 
 ```hcl
 project      = "coupon-hub"
@@ -130,11 +124,9 @@ task_cpu             = "256"
 task_memory          = "512"
 db_instance_class    = "db.t4g.micro"
 
-operator_cidr = "YOUR_IP/32"
+# Leave empty. Laptop Prisma cannot reach private RDS even with a CIDR hole.
+# operator_cidr = ""
 ```
-
-Replace `YOUR_IP` with the number from `checkip.amazonaws.com`, and keep `/32`.  
-Example: `operator_cidr = "203.0.113.10/32"`.
 
 Leave `enable_web_service = false` for the first apply.
 
@@ -215,30 +207,33 @@ Wait until the service is stable (2–5 minutes). ECS may restart once or twice 
 
 ---
 
-## Phase G — Database schema + demo data
+## Phase G — Database schema (inside the VPC)
 
-Still from the repo root (your IP is allowed via `operator_cidr`):
+`migrate.sh` starts a Fargate task in the public subnets. That task can reach private RDS; your Mac cannot.
+
+If you applied Terraform **before** the migrate task existed, re-apply and merge the new keys first:
 
 ```bash
+bash scripts/aws/infra-up.sh
+# merge .env.aws.generated → .env.aws
+# must include ECS_MIGRATE_TASK_FAMILY, ECS_SUBNETS, ECS_WEB_SG
+bash scripts/aws/build-push.sh staging   # pushes :staging-migrate
 bash scripts/aws/migrate.sh staging
 ```
 
-That runs `prisma migrate deploy` against **RDS**, not your local Postgres.
+That is `prisma migrate deploy` **on Fargate**, not on this laptop. A local Prisma P1001 against `*.rds.amazonaws.com` means you ran Prisma here — use the script above.
 
-Optional demo catalog (Nike etc.) on **staging only**:
+Do **not** `export DATABASE_URL=…rds…` and run `pnpm db:seed` on the Mac. Same private-RDS wall.
+
+Staging sample catalog (Nike, Amazon, Target, …) — in-VPC only:
 
 ```bash
-# URL is in AWS Secrets Manager; migrate.sh already used it.
-# Seed using the same secret:
-export DATABASE_URL="$(aws secretsmanager get-secret-value \
-  --profile coupon-hub --region us-east-1 \
-  --secret-id "$(grep STAGING_DATABASE_SECRET_ID .env.aws | cut -d= -f2-)" \
-  --query SecretString --output text)"
-pnpm db:seed
-pnpm db:seed:demo
+# after migrate image includes src/lib (rebuild if you just added seed.sh)
+bash scripts/aws/build-push.sh staging
+bash scripts/aws/seed.sh staging
 ```
 
-If `migrate.sh` times out: your home IP may have changed. Re-run `curl -s https://checkip.amazonaws.com`, update `operator_cidr`, `infra-up.sh` again, retry migrate.
+That upserts the demo merchants/offers. Prod: `bash scripts/aws/seed.sh prod --no-demo` (market + admin only; demo is refused).
 
 ---
 
@@ -252,14 +247,9 @@ echo "$CF"
 SMOKE_STORE_SLUG=nike pnpm smoke "$CF"
 ```
 
-If you have an offer id (from seed/demo):
+If you already know an offer id (from admin or a later in-VPC seed):
 
 ```bash
-# get one id (uses DATABASE_URL from Phase G)
-pnpm exec tsx -e 'import {PrismaClient} from "@prisma/client";
-const p=new PrismaClient();
-const o=await p.offer.findFirst({where:{status:"active"},select:{id:true}});
-console.log(o?.id); await p.$disconnect();'
 SMOKE_STORE_SLUG=nike SMOKE_OFFER_ID='paste-uuid' pnpm smoke "$CF"
 ```
 
@@ -307,7 +297,7 @@ Type `destroy`. Check the AWS Billing console the next day that RDS/ALB/Fargate/
 | `terraform: command not found` | `brew install terraform` |
 | First `infra-up` asks to create 40+ resources | That’s expected — type `yes` |
 | `build-push` / ECR login fails | Confirm `aws sts get-caller-identity --profile coupon-hub` |
-| `migrate.sh` cannot connect | IP changed → update `operator_cidr` → `infra-up.sh` |
+| Prisma `P1001` from this Mac | Expected — RDS is private. Re-apply Terraform, merge `ECS_MIGRATE_*` into `.env.aws`, `build-push.sh`, then `migrate.sh` |
 | Site 502 on CloudFront | Wait 3–5 min; `enable_web_service` true? Image pushed? |
 | Health 503 | RDS/security group or `DATABASE_URL` secret |
 

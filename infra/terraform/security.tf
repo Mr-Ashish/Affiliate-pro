@@ -64,7 +64,7 @@ resource "aws_security_group" "db" {
   dynamic "ingress" {
     for_each = var.operator_cidr != "" ? [var.operator_cidr] : []
     content {
-      description = "Postgres from operator laptop (migrate.sh)"
+      description = "Optional operator CIDR (does not expose private RDS)"
       from_port   = 5432
       to_port     = 5432
       protocol    = "tcp"

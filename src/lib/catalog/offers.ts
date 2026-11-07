@@ -1,11 +1,20 @@
 import { randomUUID } from "node:crypto";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { buildIdentityKey } from "@/lib/catalog/identity";
 import type {
   CreateManualOfferInput,
   ListActiveOffersInput,
+  OfferStatus,
 } from "@/lib/catalog/types";
 import { validateOfferInput } from "@/lib/ingest/validate";
+
+const OFFER_STATUSES = new Set<OfferStatus>([
+  "draft",
+  "active",
+  "expired",
+  "disabled",
+]);
 
 export async function createManualOffer(input: CreateManualOfferInput) {
   const merchant = await prisma.merchant.findUnique({
@@ -62,8 +71,36 @@ export async function createManualOffer(input: CreateManualOfferInput) {
       isExclusive: input.isExclusive ?? false,
       discountLabel: input.discountLabel ?? null,
       imageUrl: input.imageUrl ?? null,
+      channel: input.channel ?? null,
+      verifiedAt: input.verifiedAt ?? null,
     },
   });
+}
+
+/** Admin: pause, resume, or retire an offer. Does not delete the row. */
+export async function updateOfferStatus(id: string, status: string) {
+  const offerId = id.trim();
+  if (!offerId) {
+    throw new Error("offer id is required");
+  }
+  if (!OFFER_STATUSES.has(status as OfferStatus)) {
+    throw new Error(`invalid status: ${status}`);
+  }
+
+  try {
+    return await prisma.offer.update({
+      where: { id: offerId },
+      data: { status },
+    });
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2025"
+    ) {
+      throw new Error(`offer not found: ${offerId}`);
+    }
+    throw err;
+  }
 }
 
 export async function listActiveOffersForMerchantId(input: {
@@ -148,6 +185,9 @@ const publicOfferCardSelect = {
   verifiedAt: true,
   clickCount: true,
   createdAt: true,
+  imageUrl: true,
+  terms: true,
+  channel: true,
 } as const;
 
 const publicMerchantCardSelect = {
@@ -156,6 +196,7 @@ const publicMerchantCardSelect = {
   slug: true,
   market: true,
   logoUrl: true,
+  defaultOfferImageUrl: true,
 } as const;
 
 /** Public: featured active offers for a market (newest first). */
@@ -185,6 +226,36 @@ export async function listFeaturedOffers(params: {
   });
 }
 
+/** Public: exclusive active offers for a market (verified first). */
+export async function listExclusiveOffers(params: {
+  market: string;
+  limit?: number;
+  now?: Date;
+}) {
+  const now = params.now ?? new Date();
+  const market = params.market.trim();
+  const take = params.limit ?? 8;
+
+  return prisma.offer.findMany({
+    where: {
+      market,
+      isExclusive: true,
+      status: "active",
+      ...activeDateWindow(now),
+      merchant: { isActive: true },
+    },
+    select: {
+      ...publicOfferCardSelect,
+      merchant: { select: publicMerchantCardSelect },
+    },
+    orderBy: [
+      { verifiedAt: { sort: "desc", nulls: "last" } },
+      { createdAt: "desc" },
+    ],
+    take,
+  });
+}
+
 /** Public: recently created active offers for a market. */
 export async function listRecentOffers(params: {
   market: string;
@@ -209,6 +280,48 @@ export async function listRecentOffers(params: {
     orderBy: { createdAt: "desc" },
     take,
   });
+}
+
+/** Public: active offers ranked by click count. */
+export async function listTrendingOffers(params: {
+  market: string;
+  limit?: number;
+  now?: Date;
+}) {
+  const now = params.now ?? new Date();
+  const market = params.market.trim();
+  const take = params.limit ?? 8;
+
+  return prisma.offer.findMany({
+    where: {
+      market,
+      status: "active",
+      ...activeDateWindow(now),
+      merchant: { isActive: true },
+    },
+    select: {
+      ...publicOfferCardSelect,
+      merchant: { select: publicMerchantCardSelect },
+    },
+    orderBy: [{ clickCount: "desc" }, { createdAt: "desc" }],
+    take,
+  });
+}
+
+/** Latest click time per offer. Missing ids have no clicks. */
+export async function latestClickAtByOfferId(offerIds: string[]) {
+  const ids = [...new Set(offerIds.filter(Boolean))];
+  const map = new Map<string, Date>();
+  if (ids.length === 0) return map;
+  const rows = await prisma.clickEvent.groupBy({
+    by: ["offerId"],
+    where: { offerId: { in: ids } },
+    _max: { createdAt: true },
+  });
+  for (const row of rows) {
+    if (row._max.createdAt) map.set(row.offerId, row._max.createdAt);
+  }
+  return map;
 }
 
 /** Admin: top offers by click count. */

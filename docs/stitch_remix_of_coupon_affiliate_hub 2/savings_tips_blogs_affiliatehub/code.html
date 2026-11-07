@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AffiliateHub | Verified Savings &amp; Smart Shopping</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "error-container": "#ffdad6",
+          "outline": "#6c7a71",
+          "tertiary-fixed-dim": "#ffb95f",
+          "tertiary": "#855300",
+          "surface-container": "#e5eeff",
+          "secondary-fixed": "#dae2fd",
+          "surface-tint": "#006c49",
+          "on-error": "#ffffff",
+          "primary-container": "#10b981",
+          "secondary": "#565e74",
+          "tertiary-container": "#e29100",
+          "on-secondary-container": "#5c647a",
+          "background": "#f8f9ff",
+          "on-tertiary-container": "#523200",
+          "on-primary-container": "#00422b",
+          "surface-container-highest": "#d3e4fe",
+          "tertiary-fixed": "#ffddb8",
+          "surface-dim": "#cbdbf5",
+          "on-tertiary-fixed-variant": "#653e00",
+          "primary": "#006c49",
+          "outline-variant": "#bbcabf",
+          "on-tertiary": "#ffffff",
+          "on-secondary": "#ffffff",
+          "surface-container-low": "#eff4ff",
+          "on-primary-fixed-variant": "#005236",
+          "on-secondary-fixed-variant": "#3f465c",
+          "secondary-fixed-dim": "#bec6e0",
+          "on-background": "#0b1c30",
+          "error": "#ba1a1a",
+          "on-primary": "#ffffff",
+          "on-tertiary-fixed": "#2a1700",
+          "on-primary-fixed": "#002113",
+          "inverse-primary": "#4edea3",
+          "surface-variant": "#d3e4fe",
+          "surface-bright": "#f8f9ff",
+          "secondary-container": "#dae2fd",
+          "on-error-container": "#93000a",
+          "on-surface-variant": "#3c4a42",
+          "surface-container-high": "#dce9ff",
+          "on-surface": "#0b1c30",
+          "primary-fixed-dim": "#4edea3",
+          "inverse-on-surface": "#eaf1ff",
+          "surface": "#f8f9ff",
+          "on-secondary-fixed": "#131b2e",
+          "surface-container-lowest": "#ffffff",
+          "inverse-surface": "#213145",
+          "primary-fixed": "#6ffbbe"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xs": "0.25rem",
+          "space-lg": "1.5rem",
+          "gutter": "1.5rem",
+          "space-md": "1rem",
+          "space-sm": "0.5rem",
+          "margin-mobile": "1rem",
+          "gutter-mobile": "1rem",
+          "space-xl": "2.5rem",
+          "margin": "2rem"
+        },
+        "fontFamily": {
+          "display-hero": ["Plus Jakarta Sans"],
+          "label-lg": ["Inter"],
+          "headline-md": ["Plus Jakarta Sans"],
+          "body-md": ["Inter"],
+          "body-sm": ["Inter"],
+          "label-code": ["Inter"],
+          "label-md": ["Inter"],
+          "display-hero-mobile": ["Plus Jakarta Sans"],
+          "body-lg": ["Inter"],
+          "headline-lg-mobile": ["Plus Jakarta Sans"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "headline-sm": ["Plus Jakarta Sans"]
+        },
+        "fontSize": {
+          "display-hero": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+          "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+          "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+          "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+          "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+          "label-code": ["13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+          "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+          "display-hero-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "800" }],
+          "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+          "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+          "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+          "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }]
+        }
+      }
+    }
+  };
+</script>
+<style>
+  @layer base {
+    body {
+      overscroll-behavior: none;
+    }
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  .material-symbols-outlined.fill {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+</style>
+<meta content="web_standard" name="shell-type"/>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen">
+<header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/95 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_1px_3px_rgba(15,23,42,0.04)]">
+<div class="h-16 max-w-7xl mx-auto px-space-md sm:px-space-lg flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-lg">
+<a class="flex items-center gap-space-xs text-headline-sm font-headline-sm font-bold text-on-surface tracking-tight group" href="/">
+<span class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-white shadow-sm">
+<span class="material-symbols-outlined text-[20px] font-bold">savings</span>
+</span>
+<span>Affiliate<span class="text-primary-container">Hub</span></span>
+</a>
+<nav class="hidden md:flex items-center gap-space-md" data-active-classes="text-primary-container font-semibold border-b-2 border-primary-container pb-1">
+<a class="text-on-surface-variant hover:text-primary-container text-label-lg font-label-lg transition-colors py-1" data-path="stores" href="/stores">Stores</a>
+<a aria-current="page" class="transition-colors py-1 text-primary-container font-semibold border-b-2 border-primary-container pb-1" data-path="blogs" href="/blogs">Blogs</a>
+<a class="text-on-surface-variant hover:text-primary-container text-label-lg font-label-lg transition-colors py-1" data-path="deals" href="/deals">Deals</a>
+<a class="text-on-surface-variant hover:text-primary-container text-label-lg font-label-lg transition-colors py-1" data-path="trending" href="/trending">Trending</a>
+</nav>
+</div>
+<div class="flex items-center gap-space-sm sm:gap-space-md flex-1 max-w-md justify-end">
+<div class="relative w-full max-w-[260px] hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-surface-container-low rounded-full border border-outline-variant/40 focus:bg-surface-container-lowest focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 text-body-sm text-on-surface outline-none transition-all placeholder:text-outline/70" placeholder="Search stores, coupons..." type="text"/>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-container text-white rounded-full font-label-lg text-label-lg hover:bg-[#059669] transition-all shadow-sm active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">notifications_active</span>
+<span>Alert Me</span>
+</button>
+<a class="text-on-surface hover:text-primary-container text-label-lg font-label-lg transition-colors hidden lg:inline-block px-2" data-path="sign-in" href="/sign-in">Sign In</a>
+</div>
+</div>
+</header>
+<main class="pt-16 min-h-[calc(100vh-280px)]">
+<div class="flex flex-col w-full">
+<!-- Top Banner & Breadcrumb Nav -->
+<section class="w-full bg-surface-container-low py-space-md">
+<div class="max-w-7xl mx-auto px-space-md sm:px-space-lg">
+<nav aria-label="Breadcrumb" class="flex items-center gap-space-xs text-body-sm font-body-sm text-on-surface-variant mb-space-sm">
+<a class="hover:text-primary-container transition-colors flex items-center gap-1" href="/">
+<span class="material-symbols-outlined text-[16px]">home</span>
+<span>Home</span>
+</a>
+<span class="text-outline text-xs">/</span>
+<span class="text-on-surface font-medium">Savings Tips &amp; Shopping Guides</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md pb-space-sm">
+<div class="max-w-2xl space-y-space-xs">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-highest text-primary font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span>Editorial &amp; Shopping Insights</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+            Savings Tips &amp; Shopping Guides
+          </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+            Expert shopping advice, verified deal roundups, and insider hacks to help you stretch every dollar at checkout.
+          </p>
+</div>
+<!-- Search Bar -->
+<div class="w-full md:w-80 relative">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface-container-lowest rounded-xl shadow-sm text-body-md font-body-md text-on-surface outline-none focus:ring-2 focus:ring-primary-container/30 transition-all placeholder:text-outline" placeholder="Search savings articles, stores..." type="text"/>
+</div>
+</div>
+<!-- Category Filter Pills -->
+<div class="flex items-center gap-2 overflow-x-auto py-space-sm no-scrollbar">
+<button class="px-4 py-2 rounded-full text-label-md font-label-md bg-on-surface text-surface-container-lowest shadow-sm whitespace-nowrap transition-transform active:scale-95" type="button">
+          All Articles
+        </button>
+<button class="px-4 py-2 rounded-full text-label-md font-label-md bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface shadow-sm whitespace-nowrap transition-colors" type="button">
+          Shopping Guides
+        </button>
+<button class="px-4 py-2 rounded-full text-label-md font-label-md bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface shadow-sm whitespace-nowrap transition-colors" type="button">
+          Holiday &amp; Seasonal
+        </button>
+<button class="px-4 py-2 rounded-full text-label-md font-label-md bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface shadow-sm whitespace-nowrap transition-colors" type="button">
+          Tech &amp; Home
+        </button>
+<button class="px-4 py-2 rounded-full text-label-md font-label-md bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface shadow-sm whitespace-nowrap transition-colors" type="button">
+          Fashion &amp; Beauty
+        </button>
+<button class="px-4 py-2 rounded-full text-label-md font-label-md bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface shadow-sm whitespace-nowrap transition-colors" type="button">
+          Food &amp; Dining
+        </button>
+<button class="px-4 py-2 rounded-full text-label-md font-label-md bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface shadow-sm whitespace-nowrap transition-colors" type="button">
+          Personal Finance
+        </button>
+</div>
+</div>
+</section>
+<!-- Main Content Body -->
+<div class="max-w-7xl mx-auto px-space-md sm:px-space-lg py-space-xl space-y-space-xl">
+<!-- Hero / Featured Story with Extra-Large Imagery -->
+<article class="group bg-surface-container-lowest rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+<!-- Prominent Visual: ~58% width on desktop for visual punch -->
+<div class="lg:col-span-7 relative min-h-[340px] sm:min-h-[420px] overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" data-alt="Editorial close-up of a modern shopping enthusiast holding a smartphone with verified green cashback notifications, surrounded by stylish pastel retail parcels, receipts, credit card rewards cards, on a bright Scandinavian oak wooden desk in crisp clean natural morning light with mint emerald color accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRZKsaqg0xeYcB0dTeO0k60r-MQfIgUaX8kXyBMiF7d5UswPcna-MEudrOi6ZdawBhUce26wOIa5uFNLBrZna11qpr-WuNw9rA91zU6wy7bB7rA_k6QlVjWs-nRHUCH7Q5axDPWj5lDCnNjViofgCaiYzSnBggUHoxn1fo4Tv0F1UsI9LrFiovQl5QG3GHKX7ns227Fv1otmFrN2WIiJSR8kXTA3NuIXsH7uKCKrsUQgmUdDLd___2Vw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/60 via-transparent to-transparent lg:hidden"></div>
+<div class="absolute top-4 left-4 flex flex-wrap gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-label-md font-label-md bg-primary-container text-white shadow-md">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span>Editor's Choice</span>
+</span>
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-label-md font-label-md bg-surface-container-lowest/90 backdrop-blur text-on-surface shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">local_fire_department</span>
+<span>Trending Guide</span>
+</span>
+</div>
+</div>
+<!-- Featured Editorial Copy -->
+<div class="lg:col-span-5 p-space-lg sm:p-space-xl flex flex-col justify-between space-y-space-md bg-surface-container-lowest">
+<div class="space-y-space-sm">
+<div class="flex items-center gap-space-sm text-body-sm font-body-sm text-outline">
+<span class="uppercase tracking-wider font-semibold text-primary">Masterclass</span>
+<span>•</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+                6 min read
+              </span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface group-hover:text-primary transition-colors leading-tight">
+              The Ultimate Guide to Stacking Coupons, Cashback &amp; Loyalty Rewards in 2026
+            </h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Learn the exact sequential framework to apply merchant promo codes, activate cardholder cash multipliers, and stack affiliate bonuses to save up to 45% on every single purchase.
+            </p>
+<!-- Savings Impact Metric Box -->
+<div class="p-3 bg-surface-container-low rounded-lg flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-8 h-8 rounded-full bg-primary-container/20 text-primary-container flex items-center justify-center font-bold">
+                  %
+                </span>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Average Reader Savings</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Validated across 1,420 checkout carts</p>
+</div>
+</div>
+<span class="font-headline-sm font-headline-sm text-primary-container">$38.40/order</span>
+</div>
+</div>
+<div class="pt-space-sm flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-primary font-bold flex items-center justify-center shadow-sm">
+                PG
+              </div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface">Pat George</p>
+<p class="text-body-sm font-body-sm text-outline">Senior Savings Editor • Oct 12, 2026</p>
+</div>
+</div>
+<a class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-primary-container text-white font-label-lg text-label-lg hover:bg-surface-tint transition-all shadow-sm active:scale-95 group/btn" href="#read">
+<span>Read Full Guide</span>
+<span class="material-symbols-outlined text-[18px] group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</article>
+<!-- Section Heading: Trending Savings Tips -->
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div>
+<span class="text-label-md font-label-md uppercase tracking-wider text-primary font-semibold">Fresh From The Newsroom</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Trending Savings Tips</h2>
+</div>
+<div class="hidden sm:flex items-center gap-2 text-label-md font-label-md text-on-surface-variant">
+<span>Sort by:</span>
+<button class="font-semibold text-primary flex items-center gap-1">
+            Most Recent
+            <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant">Carefully researched buying guides to make sure you never pay retail price.</p>
+</div>
+<!-- 3-Column Grid with Extra-Large Visuals -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+<!-- Card 1: Workout Clothes -->
+<article class="group bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden">
+<!-- Large Image Container: 16:9 ratio, tall and immersive -->
+<div class="relative w-full aspect-[16/10] overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Flat lay photograph of stylish modern athletic activewear including pastel pink and lavender sports bras, high-waisted seamless navy leggings, ergonomic running shoes, jump rope, and a matte stainless water bottle on light minimalist studio background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzs051b5zikT-RKrAmP6jBCN_LhmgYLRSXNzQQyLz38ycTIg-W-NXO4YEiVkoDlJv5sBLPt7lG0JPF_ZYE9KlmJE4xg8ihi0FW6lLIK3p12G4catZkjfyCxCOOdDa7V6nlsNCypBZcANzDi-kxt2PyRID0Zfq_ubnxXjRwXv4_f9KsjTNCe_gbwMg0sstFmlAc4jrP6zocPa-n40wzTlEfvzpdCx01Pmht_6w66D0kAHQJvqZc8qMt4g"/>
+<div class="absolute top-3 left-3 flex gap-1.5">
+<span class="px-2.5 py-1 rounded-md text-label-md font-label-md bg-surface-container-lowest/90 backdrop-blur text-on-surface shadow-sm">
+              Fashion &amp; Apparel
+            </span>
+</div>
+<span class="absolute bottom-3 right-3 px-2 py-0.5 rounded text-body-sm font-label-md bg-on-surface/80 text-surface-container-lowest backdrop-blur">
+            4 min read
+          </span>
+</div>
+<div class="p-space-lg flex-1 flex flex-col justify-between space-y-space-md">
+<div class="space-y-space-xs">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-outline">
+<span>Brenda Raftlova</span>
+<span>•</span>
+<span>Feb 20, 2026</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors leading-snug">
+              The Best Places to Find Stylish, Affordable Workout Clothes
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+              Whether you're looking for sports bras, moisture-wicking tees, buttery leggings, or trail running shoes, these 9 secret outlet stores deliver premium performance wear for under $35.
+            </p>
+</div>
+<div class="pt-space-sm flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-primary font-medium">
+<span class="material-symbols-outlined text-[18px]">sell</span>
+<span>9 Verified Retailers</span>
+</div>
+<span class="inline-flex items-center gap-1 text-label-md font-label-md text-on-surface group-hover:text-primary transition-colors">
+              Read More
+              <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+</div>
+</div>
+</article>
+<!-- Card 2: Walmart Winter Goods -->
+<article class="group bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden">
+<div class="relative w-full aspect-[16/10] overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Cozy interior room corner with a modern ceramic tower space heater glowing amber warm, thick chunky wool knit blanket draped over an armchair, steaming mug of cinnamon cider, soft warm ambient lighting with cold frosted windowpane in background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhbyRxOTYDj2EnFDKQW32g8HeFQ_sRwlYvecVw4KtVFXBiDOwo19p5DXovvbjTpfZWX5SucuzRELqRsy-cJZT9cIWXN0bEJWIxRLSP4TTNvHYQzz4VTfxaD5edL7g_Dc4HX48ndm2AzvkL6QR2NS5JzX6qmaiS_1-_06RoRUvT4BBQOdidpHWhYwDB0AX1QjFPZpiODTqQGvgoNNSVM1dxNrKckMnBWCztnBg0w5EeSvX5o-hdrmvpKg"/>
+<div class="absolute top-3 left-3 flex gap-1.5">
+<span class="px-2.5 py-1 rounded-md text-label-md font-label-md bg-surface-container-lowest/90 backdrop-blur text-on-surface shadow-sm">
+              Home &amp; Kitchen
+            </span>
+<span class="px-2.5 py-1 rounded-md text-label-md font-label-md bg-primary-container text-white shadow-sm">
+              Price Drops
+            </span>
+</div>
+<span class="absolute bottom-3 right-3 px-2 py-0.5 rounded text-body-sm font-label-md bg-on-surface/80 text-surface-container-lowest backdrop-blur">
+            5 min read
+          </span>
+</div>
+<div class="p-space-lg flex-1 flex flex-col justify-between space-y-space-md">
+<div class="space-y-space-xs">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-outline">
+<span>Shannon Flynn</span>
+<span>•</span>
+<span>Oct 22, 2024</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors leading-snug">
+              Get Ready for Cooler Weather With the Best Winter Home Goods From Walmart
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+              The wintry freeze will be no match for your living space when you snag these top-rated smart thermostats, energy-saving ceramic heaters, and fleece bedding sets with rollback pricing.
+            </p>
+</div>
+<div class="pt-space-sm flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-tertiary-container font-medium">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Includes Rollback List</span>
+</div>
+<span class="inline-flex items-center gap-1 text-label-md font-label-md text-on-surface group-hover:text-primary transition-colors">
+              Read More
+              <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+</div>
+</div>
+</article>
+<!-- Card 3: Patio Clearance -->
+<article class="group bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden">
+<div class="relative w-full aspect-[16/10] overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Beautiful autumn backyard patio featuring stylish outdoor wicker conversation furniture set, burnt orange accent pillows, a glowing propane fire table, outdoor bistro string lights glowing warmly at dusk with golden fall leaves." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaYSj-PxnNMkzL7X_YdAG_6bHdIRON1HiAITqzyLLudKn2nPaZC2l11WVAKCSy4kQjo4fDk4AzXUmx74mQ_UfAUUQX2a7FZul0C2RjypnzzBihWxKdrlLbRyE3RHf_UHRU9UDIAIpB9DxXj_KkcsM2Qbom4hEmB05jHh1HTJQICudMahb1L7Hs1BBHh-MvNjBHlY0wizQZGH-pQePxahwY8aTPZDIEGhE1S7OT7ctqmH8rBrEjmOcVQA"/>
+<div class="absolute top-3 left-3 flex gap-1.5">
+<span class="px-2.5 py-1 rounded-md text-label-md font-label-md bg-surface-container-lowest/90 backdrop-blur text-on-surface shadow-sm">
+              Patio &amp; Garden
+            </span>
+</div>
+<span class="absolute bottom-3 right-3 px-2 py-0.5 rounded text-body-sm font-label-md bg-on-surface/80 text-surface-container-lowest backdrop-blur">
+            7 min read
+          </span>
+</div>
+<div class="p-space-lg flex-1 flex flex-col justify-between space-y-space-md">
+<div class="space-y-space-xs">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-outline">
+<span>Kaitlyn McInnis</span>
+<span>•</span>
+<span>Oct 8, 2024</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors leading-snug">
+              Overhaul Your Patio Space for Fall Thanks to the Walmart Deals Event
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+              Shop end-of-season clearance markdowns on weather-resistant conversation sets, stainless fire bowls, and commercial patio heaters to extend outdoor gatherings well through Thanksgiving.
+            </p>
+</div>
+<div class="pt-space-sm flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-body-sm font-body-sm text-primary font-medium">
+<span class="material-symbols-outlined text-[18px]">local_offer</span>
+<span>Up to 60% Off Picks</span>
+</div>
+<span class="inline-flex items-center gap-1 text-label-md font-label-md text-on-surface group-hover:text-primary transition-colors">
+              Read More
+              <span class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Curated Deep-Dive Guides (2-Column Wide Cards with Massive Imagery) -->
+<div class="space-y-space-lg pt-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="text-label-md font-label-md uppercase tracking-wider text-primary font-semibold">Deep Dives &amp; Analysis</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Store Hacks &amp; Retail Secrets</h2>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Wide Card 1: Entertainment Essentials -->
+<article class="group bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col sm:flex-row">
+<div class="sm:w-5/12 relative min-h-[220px] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Modern family recreation room featuring an arcade dual basketball shot game station, sleek foosball table, wall mounted 65 inch 4K OLED TV displaying gaming action, mood ambient LED lighting strips, and comfortable navy beanbag chairs." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAMtKBny5XN33jOLpHW7QFd-yk37SgIT1oBnYjY_FAfqOGVQ0YxcjB29B53tjHxk6UH1LpZ9xGqMXcFSIdBVtgUG5iOW3qBL4dZGVQTOCWcQp64ggIKEn3-x4Fc3aBLexckwBP10B-4kQAOX2tAOypShhdhwnNS4swraxBfTar0tfano3-LEHYvDA4aRd-GrF1olqkelAdhXQOh8RC02nSqnz3EZqZhxzCe-_RN0fxzZi13uvzWfbZ0g"/>
+<div class="absolute top-3 left-3">
+<span class="px-2 py-0.5 rounded text-label-md font-label-md bg-on-surface/85 text-surface-container-lowest backdrop-blur">
+                Entertainment
+              </span>
+</div>
+</div>
+<div class="sm:w-7/12 p-space-md sm:p-space-lg flex flex-col justify-between space-y-space-sm">
+<div class="space-y-space-xs">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-outline">
+<span>Kaitlyn McInnis</span>
+<span>•</span>
+<span>Oct 8, 2024</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors leading-snug">
+                Add Some Fun to Your Home With Discounted Entertainment Essentials
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+                The Deals Event is your opportunity to build a legendary game room without blowing the budget. From folding table tennis to retro arcade cabinets, here is what is actually worth buying.
+              </p>
+</div>
+<div class="pt-2 flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-primary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">savings</span>
+                Saved 42% Avg.
+              </span>
+<span class="text-label-md font-label-md text-on-surface group-hover:text-primary flex items-center gap-1">
+                Full Guide
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+</article>
+<!-- Wide Card 2: Price Matching Policies Ranked -->
+<article class="group bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col sm:flex-row">
+<div class="sm:w-5/12 relative min-h-[220px] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" data-alt="Shopper checking competitor price on a sleek smartphone while browsing retail store shelves filled with electronics and kitchen appliances, bright professional department store lighting with clean modern displays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe5SZ9vLkolwvw2PZ-exKIJ1zkGyX5-H1scCbB6CQyaWs3ZUVXjDXhhZ9BPNixsE_e_OiytYWXOfloWChhtDtIJgyeSe5wn8MrC4NNYWAKPKv0sERnKmf5efe_9f-eYv329_R7dM1FozUmVY_2s4GHiYPjCcx1VEpnP7yD4vLTR8qIH-JJcrtiGW6B_DUW1rAx_URgYcUhfSQf_pu1TZGmbqjcUO78Bxl9MqBLQtRFjtBsrAO27zq1jA"/>
+<div class="absolute top-3 left-3">
+<span class="px-2 py-0.5 rounded text-label-md font-label-md bg-primary-container text-white shadow-sm">
+                Policy Audit
+              </span>
+</div>
+</div>
+<div class="sm:w-7/12 p-space-md sm:p-space-lg flex flex-col justify-between space-y-space-sm">
+<div class="space-y-space-xs">
+<div class="flex items-center gap-2 text-body-sm font-body-sm text-outline">
+<span>Marcus Vance</span>
+<span>•</span>
+<span>Nov 4, 2026</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors leading-snug">
+                Store Price Matching Policies Ranked: Which Retailers Actually Honor Them?
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 leading-relaxed">
+                We tested 14 major retailers including Best Buy, Target, and Home Depot with 50 live price discrepancies. Discover which stores approved our matches without friction.
+              </p>
+</div>
+<div class="pt-2 flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-primary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">fact_check</span>
+                14 Stores Tested
+              </span>
+<span class="text-label-md font-label-md text-on-surface group-hover:text-primary flex items-center gap-1">
+                View Ranking
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- High-Impact Newsletter / Savings Alert Subscription Box -->
+<section class="relative bg-on-surface text-surface-container-lowest rounded-xl p-space-lg sm:p-space-xl overflow-hidden shadow-xl">
+<!-- Background Ambient Glow Accents -->
+<div class="absolute -right-24 -bottom-24 w-96 h-96 bg-primary-container/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -left-20 -top-20 w-80 h-80 bg-tertiary-container/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+<div class="lg:col-span-7 space-y-space-xs">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-primary-fixed-dim text-label-md font-label-md backdrop-blur">
+<span class="material-symbols-outlined text-[16px]">mark_email_unread</span>
+<span>The Daily Drop Newsletter</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-white tracking-tight">
+            Never Miss a Secret Promo Code or Glitch Deal Again
+          </h3>
+<p class="font-body-md text-body-md text-slate-300 max-w-xl">
+            Join 340,000+ smart shoppers who receive our curated morning briefing of price mistakes, high-yield cashback stacking tricks, and early coupon alerts.
+          </p>
+<div class="flex items-center gap-space-md pt-space-xs text-body-sm font-body-sm text-slate-400">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary-container text-[18px]">check_circle</span>
+              Zero Spam
+            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary-container text-[18px]">check_circle</span>
+              Strictly Verified Codes
+            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary-container text-[18px]">check_circle</span>
+              Unsubscribe anytime
+            </span>
+</div>
+</div>
+<div class="lg:col-span-5">
+<form class="space-y-space-xs" onsubmit="event.preventDefault(); const btn = this.querySelector('button'); btn.innerText='Subscribed!'; btn.classList.add('bg-white','text-on-surface');">
+<div class="flex flex-col sm:flex-row gap-2">
+<input class="flex-1 px-4 py-3 rounded-xl bg-surface-container-lowest text-on-surface text-body-md font-body-md placeholder:text-outline outline-none focus:ring-2 focus:ring-primary-container" placeholder="Enter your email address..." required="" type="email"/>
+<button class="px-6 py-3 rounded-xl bg-primary-container text-white font-label-lg text-label-lg hover:bg-surface-tint transition-all whitespace-nowrap shadow-md active:scale-95" type="submit">
+                Join Free
+              </button>
+</div>
+<p class="text-[11px] text-slate-400 pl-1">
+              By subscribing, you agree to our Terms of Use and Privacy Policy.
+            </p>
+</form>
+</div>
+</div>
+</section>
+<!-- Popular Store Guides & Tag Matrix -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Popular Retailer Guides</h3>
+<a class="text-label-md font-label-md text-primary hover:underline flex items-center gap-1" href="/stores">
+          View all 4,200+ stores
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm sm:gap-space-md">
+<a class="p-space-md bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md hover:border-primary transition-all flex items-center gap-3 group" href="#store-guide">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary-container group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[22px]">shopping_bag</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface group-hover:text-primary transition-colors">Target Circle 360</p>
+<p class="text-body-sm font-body-sm text-outline">Perks &amp; Stacking</p>
+</div>
+</a>
+<a class="p-space-md bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md hover:border-primary transition-all flex items-center gap-3 group" href="#store-guide">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary-container group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[22px]">hardware</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface group-hover:text-primary transition-colors">Home Depot Guide</p>
+<p class="text-body-sm font-body-sm text-outline">Markdown Yellow Tags</p>
+</div>
+</a>
+<a class="p-space-md bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md hover:border-primary transition-all flex items-center gap-3 group" href="#store-guide">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary-container group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[22px]">sports_handball</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface group-hover:text-primary transition-colors">Nike Secret Sales</p>
+<p class="text-body-sm font-body-sm text-outline">Member Promo Hacks</p>
+</div>
+</a>
+<a class="p-space-md bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md hover:border-primary transition-all flex items-center gap-3 group" href="#store-guide">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary-container group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[22px]">bolt</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-on-surface group-hover:text-primary transition-colors">Amazon Prime Hacks</p>
+<p class="text-body-sm font-body-sm text-outline">Lightning Deal Trackers</p>
+</div>
+</a>
+</div>
+</section>
+<!-- Load More Pagination Section -->
+<div class="flex flex-col items-center justify-center pt-space-md pb-space-lg space-y-space-sm">
+<p class="text-body-sm font-body-sm text-outline">Showing 6 of 48 Savings Guides</p>
+<div class="w-48 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-1/8 h-full bg-primary-container rounded-full"></div>
+</div>
+<button class="px-8 py-3 rounded-full bg-surface-container-lowest text-on-surface hover:bg-surface-container-low shadow-sm font-label-lg text-label-lg transition-all active:scale-95 flex items-center gap-2" id="loadMoreBtn" onclick="this.innerText='Loading more stories...'; setTimeout(() =&gt; { this.innerText='All Articles Loaded'; this.disabled=true; this.classList.add('opacity-50','cursor-not-allowed'); }, 800);" type="button">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+<span>Load More Articles</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-space-xl bg-surface-container-lowest border-t border-outline-variant/40">
+<div class="max-w-7xl mx-auto px-space-md sm:px-space-lg py-space-xl">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-lg mb-space-lg">
+<div class="space-y-space-sm md:col-span-1">
+<div class="flex items-center gap-space-xs text-headline-sm font-headline-sm font-bold text-on-surface">
+<span class="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center text-white text-sm font-bold">
+<span class="material-symbols-outlined text-[16px]">savings</span>
+</span>
+<span>Affiliate<span class="text-primary-container">Hub</span></span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+          Your verified destination for active coupon codes, daily cash back opportunities, and smart shopping guides.
+        </p>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg text-on-surface mb-space-sm">Quick Links</h4>
+<ul class="space-y-space-xs text-body-sm font-body-sm text-on-surface-variant">
+<li><a class="hover:text-primary-container transition-colors" href="/stores">All Stores</a></li>
+<li><a class="hover:text-primary-container transition-colors" href="/deals">Top Deals</a></li>
+<li><a class="hover:text-primary-container transition-colors" href="/trending">Trending Offers</a></li>
+<li><a class="hover:text-primary-container transition-colors" href="/blogs">Savings Blog</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg text-on-surface mb-space-sm">Company</h4>
+<ul class="space-y-space-xs text-body-sm font-body-sm text-on-surface-variant">
+<li><a class="hover:text-primary-container transition-colors" href="/about">About Us</a></li>
+<li><a class="hover:text-primary-container transition-colors" href="/contact">Contact &amp; Support</a></li>
+<li><a class="hover:text-primary-container transition-colors" href="/privacy">Privacy Policy</a></li>
+<li><a class="hover:text-primary-container transition-colors" href="/terms">Terms of Service</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-label-lg font-label-lg text-on-surface mb-space-sm">Get Price Drops</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-space-sm">Subscribe for real-time coupon alerts directly to your inbox.</p>
+<form class="flex items-center gap-space-xs" onsubmit="event.preventDefault();">
+<input class="w-full px-3 py-1.5 text-body-sm bg-surface-container-low rounded-lg border border-outline-variant/40 focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none" placeholder="Your email..." type="email"/>
+<button class="px-3 py-1.5 bg-primary-container text-white text-label-md font-label-md rounded-lg hover:bg-[#059669] transition-all whitespace-nowrap" type="submit">Join</button>
+</form>
+</div>
+</div>
+<div class="border-t border-outline-variant/30 pt-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm text-body-sm text-on-surface-variant">
+<p class="text-center md:text-left text-[11px] leading-relaxed max-w-3xl text-outline">
+        Affiliate Disclosure: AffiliateHub partners with merchants and may receive compensation when you click through or complete purchases via links on our site at no additional cost to you. All coupon codes are routinely tested and verified.
+      </p>
+<p class="text-[12px] whitespace-nowrap text-outline">© 2024 AffiliateHub. All rights reserved.</p>
+</div>
+</div>
+</footer>
+</body></html>

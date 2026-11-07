@@ -1,69 +1,85 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
-import { CouponCodeBox } from "@/components/public/CouponCodeBox";
+import { MaterialIcon } from "@/components/public/MaterialIcon";
 import { MerchantAvatar } from "@/components/public/MerchantAvatar";
-import type { DealCardViewModel } from "@/lib/ui/view-models";
+import { ShowCodeButton } from "@/components/public/ShowCodeButton";
 import { cn } from "@/lib/ui/cn";
+import { formatVerifiedAgo } from "@/lib/ui/relative-time";
+import type { DealCardViewModel } from "@/lib/ui/view-models";
 
 export type DealCardProps = {
   deal: DealCardViewModel;
 };
 
-const ctaClass =
-  "inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+const chip =
+  "inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold leading-none";
+
+function badgeChip(label: string, tone: string) {
+  switch (tone) {
+    case "ending-soon":
+      return { label: "Ends Soon", className: "bg-[#FEF3C7] text-[#D97706]", icon: "schedule" };
+    case "exclusive":
+      return { label, className: "bg-[#0F172A] text-white", icon: "star" };
+    case "featured":
+      return { label: "Staff Pick", className: "bg-[#ECFDF5] text-[#047857]", icon: "thumb_up" };
+    case "expired":
+      return { label, className: "bg-red-50 text-[#EF4444]", icon: "event_busy" };
+    case "draft":
+      return { label, className: "bg-slate-100 text-[#64748B]", icon: null };
+    default:
+      return null;
+  }
+}
 
 export function DealCard({ deal }: DealCardProps) {
+  const chips = deal.badges
+    .map((b) => badgeChip(b.label, b.tone))
+    .filter((c): c is NonNullable<typeof c> => c !== null);
+
   return (
-    <Card hover className="flex h-full flex-col gap-3 p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <MerchantAvatar
-            name={deal.merchantName}
-            logoUrl={deal.merchantLogoUrl}
-          />
-          <div>
-            <Link
-              href={`/store/${deal.merchantSlug}`}
-              className="text-sm font-semibold text-on-surface hover:text-primary"
-            >
-              {deal.merchantName}
-            </Link>
-            {deal.discountLabel ? (
-              <p className="text-xs font-bold text-secondary">{deal.discountLabel}</p>
-            ) : null}
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]">
+      <div className="flex flex-1 flex-col gap-3 p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <MerchantAvatar name={deal.merchantName} logoUrl={deal.merchantLogoUrl} />
+            <div className="min-w-0">
+              <Link
+                href={`/store/${deal.merchantSlug}`}
+                className="block truncate text-xs font-semibold uppercase tracking-wide text-[#64748B] hover:text-[#059669]"
+              >
+                {deal.merchantName}
+              </Link>
+              {deal.channelLabel ? (
+                <p className="text-xs text-[#64748B]">{deal.channelLabel}</p>
+              ) : null}
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap justify-end gap-1">
+            {chips.map((c) => (
+              <span key={c.label} className={cn(chip, c.className)}>
+                {c.icon ? <MaterialIcon name={c.icon} size={14} filled={c.icon === "star"} /> : null}
+                {c.label}
+              </span>
+            ))}
           </div>
         </div>
-        <div className="flex flex-wrap justify-end gap-1">
-          {deal.badges.map((b) => (
-            <Badge key={b.label} tone={b.tone}>
-              {b.label}
-            </Badge>
-          ))}
-        </div>
+        {deal.discountLabel ? (
+          <p className="font-display text-sm font-bold text-[#059669]">{deal.discountLabel}</p>
+        ) : null}
+        <h3 className="font-display text-lg font-semibold leading-snug text-[#0F172A]">
+          {deal.title}
+        </h3>
+        {deal.description ? (
+          <p className="line-clamp-2 text-sm text-[#64748B]">{deal.description}</p>
+        ) : null}
       </div>
-      <h3 className="text-base font-semibold text-on-surface">{deal.title}</h3>
-      {deal.description ? (
-        <p className="line-clamp-2 text-sm text-on-surface-variant">
-          {deal.description}
-        </p>
-      ) : null}
-      <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
-        {deal.code ? <CouponCodeBox code={deal.code} /> : null}
-        <a
-          href={deal.goHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            ctaClass,
-            deal.ctaLabel === "Get Code"
-              ? "bg-secondary text-on-secondary hover:bg-secondary-deep focus-visible:ring-secondary"
-              : "bg-primary text-on-primary hover:bg-primary-deep focus-visible:ring-primary",
-          )}
-        >
-          {deal.ctaLabel}
-        </a>
+      <div className="flex flex-col gap-2 border-t border-[#E2E8F0] bg-[#F8FAFC] p-4">
+        <ShowCodeButton code={deal.code} goHref={deal.goHref} label={deal.ctaLabel} />
+        {deal.verifiedAt ? (
+          <p className="text-xs font-medium text-[#64748B]">
+            Verified {formatVerifiedAgo(deal.verifiedAt)}
+          </p>
+        ) : null}
       </div>
-    </Card>
+    </article>
   );
 }
