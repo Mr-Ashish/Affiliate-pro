@@ -4,8 +4,8 @@
 #   bash scripts/smoke.sh [https://staging.example.com]
 #   SMOKE_STORE_SLUG=nike SMOKE_OFFER_ID=<uuid> bash scripts/smoke.sh
 #
-# Required: /api/health, /, /admin/login all 200
-# Optional: SMOKE_STORE_SLUG → /store/{slug} 200
+# Required: /api/health 200, / 307 to /us, /us 200, /admin/login 200
+# Optional: SMOKE_STORE_SLUG → /store/{slug} 307 and /us/store/{slug} 200
 # Optional: SMOKE_OFFER_ID   → /go/{id} 302 + Cache-Control: no-store + Location http(s)
 
 set -euo pipefail
@@ -39,18 +39,36 @@ grep -q '"ok":true' /tmp/coupon-smoke-health.json || fail "health body missing o
 grep -q '"db":"up"' /tmp/coupon-smoke-health.json || fail "health db not up"
 ok "health http=200 db=up"
 
-code="$(http_code "$BASE/")"
-[[ "$code" == "200" ]] || fail "home http=$code"
-ok "home http=200"
+home_hdr="/tmp/coupon-smoke-home.hdr"
+code="$(
+  curl -sS -D "$home_hdr" -o /dev/null -w "%{http_code}" \
+    --connect-timeout 5 --max-time "$TIMEOUT" \
+    "$BASE/" || echo "000"
+)"
+[[ "$code" == "307" ]] || fail "home http=$code (want 307 to /us)"
+grep -qiE '^location:[[:space:]]*/us[[:space:]]*$' "$home_hdr" || fail "home location is not /us"
+ok "home http=307 -> /us"
+
+code="$(http_code "$BASE/us")"
+[[ "$code" == "200" ]] || fail "us home http=$code"
+ok "us home http=200"
 
 code="$(http_code "$BASE/admin/login")"
 [[ "$code" == "200" ]] || fail "admin/login http=$code"
 ok "admin/login http=200"
 
 if [[ -n "$STORE_SLUG" ]]; then
-  code="$(http_code "$BASE/store/$STORE_SLUG")"
-  [[ "$code" == "200" ]] || fail "store/$STORE_SLUG http=$code"
-  ok "store/$STORE_SLUG http=200"
+  store_hdr="/tmp/coupon-smoke-store.hdr"
+  code="$(
+    curl -sS -D "$store_hdr" -o /dev/null -w "%{http_code}" \
+      --connect-timeout 5 --max-time "$TIMEOUT" \
+      "$BASE/store/$STORE_SLUG" || echo "000"
+  )"
+  [[ "$code" == "307" ]] || fail "store/$STORE_SLUG http=$code (want 307)"
+  grep -qiE "^location:[[:space:]]*/us/store/${STORE_SLUG}[[:space:]]*$" "$store_hdr" || fail "store/$STORE_SLUG location is not /us/store/$STORE_SLUG"
+  code="$(http_code "$BASE/us/store/$STORE_SLUG")"
+  [[ "$code" == "200" ]] || fail "us/store/$STORE_SLUG http=$code"
+  ok "store/$STORE_SLUG http=307 and /us/store/$STORE_SLUG http=200"
 else
   echo "SMOKE_SKIP store (set SMOKE_STORE_SLUG to enable)"
 fi
