@@ -37,9 +37,57 @@ model Merchant {
   offers        Offer[]
   postMerchants PostMerchant[]
   banners       Banner[]
+  externalIds   MerchantExternalId[]
 
   @@unique([market, slug])
   @@map("merchants")
+}
+
+model MerchantExternalId {
+  id         String   @id @default(uuid())
+  merchantId String   @map("merchant_id")
+  sourceId   String   @map("source_id")
+  externalId String   @map("external_id")
+  market     String
+  createdAt  DateTime @default(now()) @map("created_at")
+  merchant   Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceId, externalId, market])
+  @@index([merchantId])
+  @@map("merchant_external_ids")
+}
+
+model SourceRun {
+  id         String    @id @default(uuid())
+  sourceId   String    @map("source_id")
+  jobName    String    @map("job_name")
+  startedAt  DateTime  @default(now()) @map("started_at")
+  finishedAt DateTime? @map("finished_at")
+  status     String
+  stats      Json?
+  error      String?
+  payloads   RawSourcePayload[]
+
+  @@index([sourceId, startedAt])
+  @@map("source_runs")
+}
+
+model RawSourcePayload {
+  id             String     @id @default(uuid())
+  sourceId       String     @map("source_id")
+  sourceRecordId String     @map("source_record_id")
+  offerId        String?    @map("offer_id")
+  payload        Json
+  fetchedAt      DateTime   @map("fetched_at")
+  sourceRunId    String?    @map("source_run_id")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  offer          Offer?     @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  sourceRun      SourceRun? @relation(fields: [sourceRunId], references: [id], onDelete: SetNull)
+
+  @@unique([sourceId, sourceRecordId])
+  @@index([offerId])
+  @@index([fetchedAt])
+  @@map("raw_source_payloads")
 }
 
 model Offer {
@@ -72,11 +120,38 @@ model Offer {
   marketRef      Market    @relation(fields: [market], references: [code])
   clicks         ClickEvent[]
   banners        Banner[]
+  rawPayloads    RawSourcePayload[]
+  categories     OfferCategory[]
 
   @@unique([sourceId, sourceRecordId])
   @@index([market, status, endsAt])
   @@index([merchantId, status])
   @@map("offers")
+}
+
+model Category {
+  id          String          @id @default(uuid())
+  slug        String          @unique
+  name        String
+  description String?
+  sortOrder   Int             @default(0) @map("sort_order")
+  isActive    Boolean         @default(true) @map("is_active")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  offers      OfferCategory[]
+
+  @@map("categories")
+}
+
+model OfferCategory {
+  offerId    String   @map("offer_id")
+  categoryId String   @map("category_id")
+  offer      Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([offerId, categoryId])
+  @@index([categoryId])
+  @@map("offer_categories")
 }
 
 model Banner {

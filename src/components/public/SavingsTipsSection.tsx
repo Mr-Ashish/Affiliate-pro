@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MaterialIcon } from "@/components/public/MaterialIcon";
+import { marketPath } from "@/lib/market/path";
 
 export type SavingsTipsPost = {
   title: string;
@@ -12,6 +13,7 @@ export type SavingsTipsPost = {
 };
 
 export type SavingsTipsSectionProps = {
+  market: string;
   posts: SavingsTipsPost[];
 };
 
@@ -77,7 +79,7 @@ function SavingsTipRow({ post }: { post: SavingsTipsPost }) {
   );
 }
 
-export function SavingsTipsSection({ posts }: SavingsTipsSectionProps) {
+export function SavingsTipsSection({ market, posts }: SavingsTipsSectionProps) {
   if (posts.length === 0) return null;
 
   return (
@@ -90,7 +92,7 @@ export function SavingsTipsSection({ posts }: SavingsTipsSectionProps) {
           Savings Tips
         </h2>
         <Link
-          href="/blog"
+          href={marketPath(market, "/blog")}
           className="inline-flex shrink-0 items-center gap-1 text-xs font-bold text-[#059669] hover:text-[#047857] hover:underline"
         >
           View all ›

@@ -43,7 +43,7 @@ export function DealCard({ deal }: DealCardProps) {
             <MerchantAvatar name={deal.merchantName} logoUrl={deal.merchantLogoUrl} />
             <div className="min-w-0">
               <Link
-                href={`/store/${deal.merchantSlug}`}
+                href={deal.storeHref}
                 className="block truncate text-xs font-semibold uppercase tracking-wide text-[#64748B] hover:text-[#059669]"
               >
                 {deal.merchantName}

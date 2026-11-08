@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { MaterialIcon } from "@/components/public/MaterialIcon";
 import { ShowCodeButton } from "@/components/public/ShowCodeButton";
@@ -21,6 +22,7 @@ export type StoreOfferItem = {
   usedCount: number;
   channelLabel: string | null;
   isFeatured: boolean;
+  categories?: { name: string; href: string }[];
 };
 
 const filters = [
@@ -87,6 +89,15 @@ export function StoreOfferBoard({ offers }: { offers: StoreOfferItem[] }) {
                   <p className="text-lg font-semibold text-on-surface">{offer.title}</p>
                   {offer.description ? (
                     <p className="text-sm text-on-surface-variant">{offer.description}</p>
+                  ) : null}
+                  {(offer.categories ?? []).length > 0 ? (
+                    <p className="flex flex-wrap gap-2 text-sm">
+                      {(offer.categories ?? []).map((category) => (
+                        <Link key={category.href} href={category.href} className="font-medium text-primary hover:underline">
+                          {category.name}
+                        </Link>
+                      ))}
+                    </p>
                   ) : null}
                   <div className="flex flex-wrap items-center gap-2">
                     {offer.verifiedLabel ? (

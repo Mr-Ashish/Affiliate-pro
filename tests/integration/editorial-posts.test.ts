@@ -67,8 +67,8 @@ describe.skipIf(!hasDb)("editorial posts (DB)", () => {
       await prisma.author.create({
         data: {
           slug: "editors",
-          name: "AffiliateHub Editors",
-          bio: "The AffiliateHub editorial team.",
+          name: "Perkbonus Editors",
+          bio: "The Perkbonus editorial team.",
         },
       });
     }

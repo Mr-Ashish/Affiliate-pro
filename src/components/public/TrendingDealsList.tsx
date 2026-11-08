@@ -2,8 +2,10 @@ import Link from "next/link";
 import { MaterialIcon } from "@/components/public/MaterialIcon";
 import { MerchantAvatar } from "@/components/public/MerchantAvatar";
 import type { ListOffer } from "@/components/public/ExclusiveCodesList";
+import { marketPath } from "@/lib/market/path";
 
 export type TrendingDealsListProps = {
+  market: string;
   offers: ListOffer[];
 };
 
@@ -40,7 +42,7 @@ function TrendingRow({ offer }: { offer: ListOffer }) {
   );
 }
 
-export function TrendingDealsList({ offers }: TrendingDealsListProps) {
+export function TrendingDealsList({ market, offers }: TrendingDealsListProps) {
   return (
     <section
       aria-labelledby="trending-offers-heading"
@@ -59,7 +61,7 @@ export function TrendingDealsList({ offers }: TrendingDealsListProps) {
           </h2>
         </div>
         <Link
-          href="/trending"
+          href={marketPath(market, "/trending")}
           className="text-xs font-bold text-[#059669] hover:text-[#047857] hover:underline"
         >
           View all ›

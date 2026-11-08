@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
+import { SITE_NAME } from "@/lib/brand";
 import { toBlogPostingJsonLd } from "@/lib/editorial/json-ld";
 import { getPublicBaseUrl } from "@/lib/editorial/public-base-url";
 
@@ -8,7 +9,7 @@ const post = {
   excerpt: "When to buy.",
   publishedAt: new Date("2026-09-23T12:00:00.000Z"),
   updatedAt: new Date("2026-09-23T12:00:00.000Z"),
-  author: { name: "AffiliateHub Editors", slug: "editors" },
+  author: { name: "Perkbonus Editors", slug: "editors" },
   hero: { url: "https://cdn.example/nike.jpg", alt: "Nike" },
 };
 
@@ -19,7 +20,7 @@ describe("toBlogPostingJsonLd", () => {
     expect(json.headline).toBe("Nike sale calendar");
     expect(json.author).toEqual({
       "@type": "Person",
-      name: "AffiliateHub Editors",
+      name: "Perkbonus Editors",
       url: "https://example.com/blog/author/editors",
     });
     expect(json.image).toEqual(["https://cdn.example/nike.jpg"]);
@@ -28,7 +29,7 @@ describe("toBlogPostingJsonLd", () => {
     expect(json.dateModified).toBe("2026-09-23T12:00:00.000Z");
     expect(json.publisher).toEqual({
       "@type": "Organization",
-      name: "AffiliateHub",
+      name: SITE_NAME,
       url: "https://example.com",
     });
   });
@@ -41,11 +42,11 @@ describe("toBlogPostingJsonLd", () => {
     expect(json.dateModified).toBe("2026-09-23T12:00:00.000Z");
     expect(json.author).toEqual({
       "@type": "Person",
-      name: "AffiliateHub Editors",
+      name: "Perkbonus Editors",
     });
     expect(json.publisher).toEqual({
       "@type": "Organization",
-      name: "AffiliateHub",
+      name: SITE_NAME,
     });
     expect(json).not.toHaveProperty("url");
     expect(json).not.toHaveProperty("mainEntityOfPage");

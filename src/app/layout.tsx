@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/brand";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,10 +23,10 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "AffiliateHub",
-    template: "%s · AffiliateHub",
+    default: SITE_NAME,
+    template: `%s · ${SITE_NAME}`,
   },
-  description: "US coupons and deals — trusted affiliate hub",
+  description: SITE_DESCRIPTION,
 };
 
 export default function RootLayout({

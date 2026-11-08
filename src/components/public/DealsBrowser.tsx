@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { MaterialIcon } from "@/components/public/MaterialIcon";
 import { ShowCodeButton } from "@/components/public/ShowCodeButton";
+import { useMarketPath } from "@/components/public/MarketProvider";
 import { Container } from "@/components/ui/Container";
 import type { BadgeTone } from "@/components/ui/Badge";
 
@@ -61,6 +62,7 @@ export function DealsBrowser({
   deals: DealListItem[];
   shops: { name: string; slug: string; offerCount: number }[];
 }) {
+  const hrefFor = useMarketPath();
   const [openId, setOpenId] = useState<string | null>(null);
   const open = deals.find((deal) => deal.id === openId) ?? null;
 
@@ -86,7 +88,7 @@ export function DealsBrowser({
               {shops.map((shop) => (
                 <li key={shop.slug} className="shrink-0">
                   <Link
-                    href={`/store/${shop.slug}`}
+                    href={hrefFor(`/store/${shop.slug}`)}
                     className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-1.5 text-sm font-semibold text-[#0F172A] transition-colors hover:border-[#10B981] hover:bg-[#ECFDF5] hover:text-[#047857]"
                   >
                     {shop.name}

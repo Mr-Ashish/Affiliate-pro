@@ -1,4 +1,5 @@
 import { OffersTable } from "@/components/admin/OffersTable";
+import { listActiveCategories } from "@/lib/catalog/categories";
 import { listOffers } from "@/lib/catalog/offers";
 
 export default async function AdminOffersPage({
@@ -8,7 +9,10 @@ export default async function AdminOffersPage({
 }) {
   const params = await searchParams;
   const error = params.error;
-  const offers = await listOffers();
+  const [offers, categories] = await Promise.all([
+    listOffers(),
+    listActiveCategories(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -42,7 +46,10 @@ export default async function AdminOffersPage({
           merchantName: o.merchant.name,
           merchantMarket: o.merchant.market,
           merchantSlug: o.merchant.slug,
+          categoryIds: o.categories.map((link) => link.category.id),
+          categoryNames: o.categories.map((link) => link.category.name),
         }))}
+        categories={categories}
       />
     </div>
   );

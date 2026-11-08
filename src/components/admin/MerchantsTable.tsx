@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ExternalLink, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { marketPath } from "@/lib/market/path";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Input } from "@/components/ui/Input";
@@ -124,7 +125,7 @@ export function MerchantsTable({ merchants }: MerchantsTableProps) {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Link
-                      href={`/store/${m.slug}`}
+                      href={marketPath(m.market, `/store/${m.slug}`)}
                       className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                       target="_blank"
                     >

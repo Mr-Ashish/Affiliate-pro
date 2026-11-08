@@ -55,4 +55,12 @@ describe("filterAdminOffers", () => {
       filterAdminOffers(rows, { q: "  ", status: "all", merchantId: "all" }),
     ).toHaveLength(3);
   });
+
+  it("filters by category id", () => {
+    const tagged = rows.map((row, index) => ({
+      ...row,
+      categoryIds: index === 0 ? ["beauty"] : [],
+    }));
+    expect(filterAdminOffers(tagged, { categoryId: "beauty" }).map((row) => row.id)).toEqual(["1"]);
+  });
 });

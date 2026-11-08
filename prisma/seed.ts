@@ -1,10 +1,12 @@
 import { hash } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
+import { EDITORIAL_TEAM_BIO, EDITORIAL_TEAM_NAME } from "../src/lib/brand";
 import {
   seedDemoCatalog,
   shouldAllowDemoSeed,
   shouldSeedDemo,
 } from "../src/lib/catalog/seed-demo";
+import { seedStarterCategories } from "../src/lib/catalog/categories";
 
 const prisma = new PrismaClient();
 
@@ -26,11 +28,11 @@ async function main() {
 
   await prisma.author.upsert({
     where: { slug: "editors" },
-    update: { name: "AffiliateHub Editors" },
+    update: { name: EDITORIAL_TEAM_NAME, bio: EDITORIAL_TEAM_BIO },
     create: {
       slug: "editors",
-      name: "AffiliateHub Editors",
-      bio: "The AffiliateHub editorial team.",
+      name: EDITORIAL_TEAM_NAME,
+      bio: EDITORIAL_TEAM_BIO,
     },
   });
 
@@ -56,6 +58,9 @@ async function main() {
       console.log(`Created admin user: ${email}`);
     }
   }
+
+  const categories = await seedStarterCategories(prisma);
+  console.log(`Starter categories created: ${categories.created}`);
 
   // Default (`pnpm db:seed`) stays market + admin only.
   // Demo catalog: `pnpm db:seed -- --demo` or SEED_DEMO=1

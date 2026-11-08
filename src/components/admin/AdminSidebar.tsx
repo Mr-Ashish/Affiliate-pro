@@ -10,7 +10,9 @@ import {
   Plus,
   LogOut,
 } from "lucide-react";
+import { BrandMark } from "@/components/public/BrandLogo";
 import { Icon } from "@/components/ui/Icon";
+import { SITE_NAME } from "@/lib/brand";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/ui/cn";
 
@@ -30,12 +32,7 @@ type NavItem = {
 const nav: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/merchants", label: "Merchants", icon: Store },
-  {
-    href: "/admin/categories",
-    label: "Categories",
-    icon: Tags,
-    disabled: true,
-  },
+  { href: "/admin/categories", label: "Categories", icon: Tags },
   { href: "/admin/posts", label: "Posts", icon: Newspaper },
   { href: "/admin/banners", label: "Banners", icon: ImageIcon },
   { href: "/admin/offers", label: "Offers", icon: Ticket },
@@ -53,9 +50,12 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-[var(--sidebar-width)] flex-col border-r border-outline-variant/60 bg-surface-lowest p-4 md:flex">
-      <div className="mb-6 px-2">
-        <p className="text-lg font-bold text-primary-deep">Admin Panel</p>
-        <p className="text-xs text-on-surface-variant">AffiliateHub</p>
+      <div className="mb-6 flex items-center gap-2 px-2">
+        <BrandMark className="h-9 w-9 shrink-0" alt="" />
+        <div>
+          <p className="text-lg font-bold text-primary-deep">Admin Panel</p>
+          <p className="text-xs text-on-surface-variant">{SITE_NAME}</p>
+        </div>
       </div>
       <nav className="flex flex-1 flex-col gap-1" aria-label="Admin">
         {nav.map((item) => {

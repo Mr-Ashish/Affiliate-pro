@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { UNPREFIXED_CATALOG_REDIRECTS } from "./src/lib/market/path";
 
 const nextConfig: NextConfig = {
   output: "standalone",
@@ -9,6 +10,9 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: ["*.cloudfront.net"],
     },
+  },
+  async redirects() {
+    return UNPREFIXED_CATALOG_REDIRECTS;
   },
 };
 

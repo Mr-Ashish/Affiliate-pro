@@ -8,7 +8,14 @@ import {
 } from "@/lib/catalog/merchants";
 import { createBanner } from "@/lib/catalog/banners";
 import { createManualOffer, updateOfferStatus } from "@/lib/catalog/offers";
-import { revalidateEditorial, revalidatePublicCatalog } from "@/lib/catalog/public-cache";
+import {
+  addOfferToCategory,
+  createCategory,
+  removeOfferFromCategory,
+  setOfferCategories,
+  updateCategory,
+} from "@/lib/catalog/categories";
+import { revalidateCategoryPages, revalidateEditorial, revalidatePublicCatalog } from "@/lib/catalog/public-cache";
 import { createPost, updatePost } from "@/lib/editorial/posts";
 import type { PostStatus } from "@/lib/editorial/types";
 import type { OfferChannel, OfferStatus, OfferType } from "@/lib/catalog/types";
@@ -101,7 +108,7 @@ export async function createOfferAction(formData: FormData) {
     }
     const imageUrl = optionalText(formData.get("imageUrl"));
     assertHttpUrl("imageUrl", imageUrl);
-    await createManualOffer({
+    const assigned = await createManualOffer({
       merchantId,
       title,
       description: optionalText(formData.get("description")),
@@ -118,9 +125,17 @@ export async function createOfferAction(formData: FormData) {
       imageUrl,
       channel: (channelRaw as OfferChannel | null) ?? null,
       verifiedAt: optionalDate(formData.get("verifiedAt")),
+      categoryIds: categoryIdsFromForm(formData),
     });
     const slug = await getMerchantSlugById(merchantId);
     revalidatePublicCatalog(slug ?? undefined);
+    const links = await import("@/lib/db").then(({ prisma }) =>
+      prisma.offerCategory.findMany({
+        where: { offerId: assigned.id },
+        include: { category: { select: { slug: true } } },
+      }),
+    );
+    revalidateCategoryPages(links.map((row) => row.category.slug));
   } catch (err) {
     error = err instanceof Error ? err.message : "Failed to create offer";
   }
@@ -278,4 +293,106 @@ export async function createBannerAction(formData: FormData) {
     redirect(`/admin/banners/new?error=${encodeURIComponent(error)}`);
   }
   redirect("/admin/banners");
+}
+
+function categoryIdsFromForm(formData: FormData): string[] {
+  return formData
+    .getAll("categoryIds")
+    .map((value) => String(value).trim())
+    .filter(Boolean);
+}
+
+function categoryFields(formData: FormData) {
+  const sortRaw = String(formData.get("sortOrder") ?? "").trim();
+  const sortOrder = sortRaw ? Number(sortRaw) : 0;
+  if (!Number.isFinite(sortOrder)) throw new Error("sort order must be a number");
+  return {
+    name: String(formData.get("name") ?? "").trim(),
+    slug: String(formData.get("slug") ?? "").trim(),
+    description: optionalText(formData.get("description")),
+    sortOrder,
+    isActive: formData.getAll("isActive").includes("on"),
+  };
+}
+
+export async function createCategoryAction(formData: FormData) {
+  await requireAdmin();
+  let error: string | null = null;
+  let id = "";
+  try {
+    const created = await createCategory(categoryFields(formData));
+    id = created.id;
+    revalidateCategoryPages([created.slug]);
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to create category";
+  }
+  if (error) redirect(`/admin/categories/new?error=${encodeURIComponent(error)}`);
+  redirect(`/admin/categories/${id}`);
+}
+
+export async function updateCategoryAction(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "").trim();
+  let error: string | null = null;
+  try {
+    const previousSlug = String(formData.get("previousSlug") ?? "").trim();
+    const updated = await updateCategory(id, categoryFields(formData));
+    revalidateCategoryPages([previousSlug, updated.slug]);
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to update category";
+  }
+  if (error) redirect(`/admin/categories/${id}?error=${encodeURIComponent(error)}`);
+  redirect(`/admin/categories/${id}`);
+}
+
+export async function setOfferCategoriesAction(formData: FormData) {
+  await requireAdmin();
+  const offerId = String(formData.get("offerId") ?? "").trim();
+  let error: string | null = null;
+  try {
+    const result = await setOfferCategories(offerId, categoryIdsFromForm(formData));
+    const slug = await getMerchantSlugById(
+      (await import("@/lib/db").then(({ prisma }) =>
+        prisma.offer.findUnique({ where: { id: offerId }, select: { merchantId: true } }),
+      ))?.merchantId ?? "",
+    );
+    revalidatePublicCatalog(slug ?? undefined);
+    revalidateCategoryPages(result.affectedSlugs);
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to assign categories";
+  }
+  if (error) redirect(`/admin/offers/${offerId}?error=${encodeURIComponent(error)}`);
+  redirect(`/admin/offers/${offerId}`);
+}
+
+export async function addOfferToCategoryAction(formData: FormData) {
+  await requireAdmin();
+  const categoryId = String(formData.get("categoryId") ?? "").trim();
+  const offerId = String(formData.get("offerId") ?? "").trim();
+  const q = String(formData.get("q") ?? "");
+  let error: string | null = null;
+  try {
+    const result = await addOfferToCategory(offerId, categoryId);
+    revalidateCategoryPages(result.affectedSlugs);
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to add offer";
+  }
+  const back = `/admin/categories/${categoryId}?q=${encodeURIComponent(q)}`;
+  if (error) redirect(`${back}&error=${encodeURIComponent(error)}`);
+  redirect(back);
+}
+
+export async function removeOfferFromCategoryAction(formData: FormData) {
+  await requireAdmin();
+  const categoryId = String(formData.get("categoryId") ?? "").trim();
+  const offerId = String(formData.get("offerId") ?? "").trim();
+  let error: string | null = null;
+  try {
+    const result = await removeOfferFromCategory(offerId, categoryId);
+    revalidateCategoryPages(result.affectedSlugs);
+  } catch (err) {
+    error = err instanceof Error ? err.message : "Failed to remove offer";
+  }
+  if (error) redirect(`/admin/categories/${categoryId}?error=${encodeURIComponent(error)}`);
+  redirect(`/admin/categories/${categoryId}`);
 }

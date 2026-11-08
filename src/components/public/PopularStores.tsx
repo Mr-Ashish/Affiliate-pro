@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MerchantAvatar } from "@/components/public/MerchantAvatar";
+import { marketPath } from "@/lib/market/path";
 
 export type PopularStoreItem = {
   name: string;
@@ -9,10 +10,11 @@ export type PopularStoreItem = {
 };
 
 export type PopularStoresProps = {
+  market: string;
   stores: PopularStoreItem[];
 };
 
-export function PopularStores({ stores }: PopularStoresProps) {
+export function PopularStores({ market, stores }: PopularStoresProps) {
   if (stores.length === 0) {
     return (
       <p className="text-sm text-on-surface-variant">
@@ -26,7 +28,7 @@ export function PopularStores({ stores }: PopularStoresProps) {
       {stores.map((s) => (
         <li key={s.slug} className="shrink-0">
           <Link
-            href={`/store/${s.slug}`}
+            href={marketPath(market, `/store/${s.slug}`)}
             className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white py-1.5 pl-1.5 pr-4 text-sm font-semibold text-[#0F172A] shadow-[var(--shadow-card)] transition hover:border-[#10B981]/50 hover:text-[#059669] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-[#10B981]/20"
           >
             <MerchantAvatar name={s.name} logoUrl={s.logoUrl} className="h-7 w-7 text-[10px]" />

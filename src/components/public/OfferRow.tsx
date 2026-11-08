@@ -23,7 +23,7 @@ export function OfferRow({ offer }: OfferRowProps) {
         </div>
         <p className="font-semibold text-on-surface">{offer.title}</p>
         <Link
-          href={`/store/${offer.merchantSlug}`}
+          href={offer.storeHref}
           className="text-sm text-on-surface-variant hover:text-primary"
         >
           {offer.merchantName}

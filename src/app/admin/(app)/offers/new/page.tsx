@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createOfferAction } from "@/app/admin/actions";
+import { listActiveCategories } from "@/lib/catalog/categories";
 import { listMerchants } from "@/lib/catalog/merchants";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -13,7 +14,10 @@ export default async function AdminNewOfferPage({
 }) {
   const params = await searchParams;
   const error = params.error;
-  const merchants = await listMerchants();
+  const [merchants, categories] = await Promise.all([
+    listMerchants(),
+    listActiveCategories(),
+  ]);
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
@@ -128,6 +132,19 @@ export default async function AdminNewOfferPage({
               <label htmlFor="terms" className="text-sm font-medium">Terms</label>
               <Input id="terms" name="terms" type="text" />
             </div>
+            <fieldset className="space-y-2">
+              <legend className="text-sm font-medium">Categories</legend>
+              {categories.length === 0 ? (
+                <p className="text-sm text-on-surface-variant">No active categories yet.</p>
+              ) : (
+                categories.map((category) => (
+                  <label key={category.id} className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" name="categoryIds" value={category.id} />
+                    {category.name}
+                  </label>
+                ))
+              )}
+            </fieldset>
             <label className="flex items-center gap-2 text-sm"><input name="isFeatured" type="checkbox" /> Featured</label>
             <label className="flex items-center gap-2 text-sm"><input name="isExclusive" type="checkbox" /> Exclusive</label>
             <div className="space-y-1">

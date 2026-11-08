@@ -31,16 +31,22 @@ export type OfferTableRow = {
   merchantName: string;
   merchantMarket: string;
   merchantSlug: string;
+  categoryIds?: string[];
+  categoryNames?: string[];
 };
+
+export type OfferCategoryOption = { id: string; name: string };
 
 export type OffersTableProps = {
   offers: OfferTableRow[];
+  categories?: OfferCategoryOption[];
 };
 
-export function OffersTable({ offers }: OffersTableProps) {
+export function OffersTable({ offers, categories = [] }: OffersTableProps) {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("all");
   const [merchantId, setMerchantId] = useState("all");
+  const [categoryId, setCategoryId] = useState("all");
 
   const merchants = useMemo(() => {
     const byId = new Map<string, string>();
@@ -53,8 +59,8 @@ export function OffersTable({ offers }: OffersTableProps) {
   }, [offers]);
 
   const filtered = useMemo(
-    () => filterAdminOffers(offers, { q, status, merchantId }),
-    [offers, q, status, merchantId],
+    () => filterAdminOffers(offers, { q, status, merchantId, categoryId }),
+    [offers, q, status, merchantId, categoryId],
   );
 
   return (
@@ -93,6 +99,19 @@ export function OffersTable({ offers }: OffersTableProps) {
               </option>
             ))}
           </Select>
+          <Select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            aria-label="Filter by category"
+            className="max-w-[12rem]"
+          >
+            <option value="all">All categories</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Select>
         </div>
         <Link href="/admin/offers/new">
           <Button variant="primary" size="sm">
@@ -114,6 +133,7 @@ export function OffersTable({ offers }: OffersTableProps) {
               <TableHead>Merchant</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Code</TableHead>
+              <TableHead>Categories</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Clicks</TableHead>
               <TableHead>
@@ -124,7 +144,11 @@ export function OffersTable({ offers }: OffersTableProps) {
           <TableBody>
             {filtered.map((o) => (
               <TableRow key={o.id}>
-                <TableCell className="font-medium">{o.title}</TableCell>
+                <TableCell className="font-medium">
+                  <Link href={`/admin/offers/${o.id}`} className="hover:underline">
+                    {o.title}
+                  </Link>
+                </TableCell>
                 <TableCell>
                   {o.merchantName}{" "}
                   <code className="text-xs text-on-surface-variant">
@@ -138,6 +162,9 @@ export function OffersTable({ offers }: OffersTableProps) {
                   ) : (
                     "—"
                   )}
+                </TableCell>
+                <TableCell className="text-xs text-on-surface-variant">
+                  {(o.categoryNames ?? []).join(", ") || "—"}
                 </TableCell>
                 <TableCell>
                   <Badge tone={statusBadgeTone(o.status)}>{o.status}</Badge>

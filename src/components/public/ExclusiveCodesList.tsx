@@ -5,7 +5,9 @@ import { useState } from "react";
 import { CouponCodeBox } from "@/components/public/CouponCodeBox";
 import { MaterialIcon } from "@/components/public/MaterialIcon";
 import { MerchantAvatar } from "@/components/public/MerchantAvatar";
+import { useMarketPath } from "@/components/public/MarketProvider";
 import { maskCouponCode } from "@/lib/catalog/offer-display";
+import { SITE_NAME } from "@/lib/brand";
 import { formatVerifiedAgo } from "@/lib/ui/relative-time";
 
 export type ListOffer = {
@@ -99,6 +101,7 @@ function ExclusiveRow({ offer }: { offer: ListOffer }) {
 }
 
 export function ExclusiveCodesList({ offers }: ExclusiveCodesListProps) {
+  const hrefFor = useMarketPath();
   return (
     <section
       aria-labelledby="exclusive-partner-codes-heading"
@@ -115,14 +118,14 @@ export function ExclusiveCodesList({ offers }: ExclusiveCodesListProps) {
           </h2>
         </div>
         <span className="inline-flex items-center rounded-full border border-[#A7F3D0] bg-[#ECFDF5]/70 px-2.5 py-0.5 text-xs font-bold text-[#065F46]">
-          Only on AffiliateHub
+          Only on {SITE_NAME}
         </span>
       </div>
 
       {offers.length === 0 ? (
         <p className="text-sm text-[#64748B]">
           No exclusive codes right now.{" "}
-          <Link href="/deals" className="font-semibold text-[#059669] hover:underline">
+          <Link href={hrefFor("/deals")} className="font-semibold text-[#059669] hover:underline">
             Browse all deals
           </Link>
         </p>

@@ -1,4 +1,5 @@
 import { channelLabel, resolveOfferImageUrl } from "@/lib/catalog/offer-display";
+import { DEFAULT_MARKET, marketPath } from "@/lib/market/path";
 import { isEndingSoon } from "@/lib/ui/ending-soon";
 import type { BadgeTone } from "@/components/ui/Badge";
 
@@ -37,6 +38,7 @@ export type DealCardViewModel = {
   description: string | null;
   merchantName: string;
   merchantSlug: string;
+  storeHref: string;
   merchantLogoUrl: string | null;
   code: string | null;
   goHref: string;
@@ -56,6 +58,7 @@ export type OfferRowViewModel = {
   title: string;
   merchantName: string;
   merchantSlug: string;
+  storeHref: string;
   code: string | null;
   goHref: string;
   ctaLabel: "Get Code" | "Shop Deal";
@@ -102,6 +105,7 @@ export function toDealCardViewModel(
     description: offer.description ?? null,
     merchantName: merchant.name,
     merchantSlug: merchant.slug,
+    storeHref: marketPath(merchant.market ?? DEFAULT_MARKET, `/store/${merchant.slug}`),
     merchantLogoUrl: merchant.logoUrl ?? null,
     code: offer.code ?? null,
     goHref: `/go/${offer.id}`,
@@ -127,6 +131,7 @@ export function toOfferRowViewModel(
     title: offer.title,
     merchantName: merchant.name,
     merchantSlug: merchant.slug,
+    storeHref: marketPath(merchant.market ?? DEFAULT_MARKET, `/store/${merchant.slug}`),
     code: offer.code ?? null,
     goHref: `/go/${offer.id}`,
     ctaLabel: offerCtaLabel(offer.code),

@@ -8,6 +8,7 @@ import type {
   OfferStatus,
 } from "@/lib/catalog/types";
 import { validateOfferInput } from "@/lib/ingest/validate";
+import { setOfferCategories } from "@/lib/catalog/categories";
 
 const OFFER_STATUSES = new Set<OfferStatus>([
   "draft",
@@ -40,6 +41,17 @@ export async function createManualOffer(input: CreateManualOfferInput) {
     throw new Error(validationError);
   }
 
+  const categoryIds = [...new Set((input.categoryIds ?? []).map((id) => id.trim()).filter(Boolean))];
+  if (categoryIds.length > 0) {
+    const found = await prisma.category.findMany({
+      where: { id: { in: categoryIds } },
+      select: { id: true },
+    });
+    if (found.length !== categoryIds.length) {
+      throw new Error("unknown category");
+    }
+  }
+
   const id = randomUUID();
   const identityKey = buildIdentityKey({
     market: merchant.market,
@@ -49,7 +61,7 @@ export async function createManualOffer(input: CreateManualOfferInput) {
     title: input.title,
   });
 
-  return prisma.offer.create({
+  const created = await prisma.offer.create({
     data: {
       id,
       market: merchant.market,
@@ -75,6 +87,11 @@ export async function createManualOffer(input: CreateManualOfferInput) {
       verifiedAt: input.verifiedAt ?? null,
     },
   });
+
+  if (categoryIds.length > 0) {
+    await setOfferCategories(id, categoryIds);
+  }
+  return created;
 }
 
 /** Admin: pause, resume, or retire an offer. Does not delete the row. */
@@ -157,6 +174,9 @@ export async function listOffers() {
     include: {
       merchant: {
         select: { id: true, name: true, slug: true, market: true },
+      },
+      categories: {
+        include: { category: { select: { id: true, name: true, slug: true } } },
       },
     },
   });

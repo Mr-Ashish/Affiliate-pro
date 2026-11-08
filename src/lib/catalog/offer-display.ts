@@ -1,3 +1,5 @@
+import { DEFAULT_MARKET, marketPath } from "@/lib/market/path";
+
 export const DEFAULT_OFFER_IMAGE = "/images/default-offer.png";
 
 export function resolveOfferImageUrl(
@@ -65,12 +67,16 @@ export function bannerHref(banner: {
   linkType: string;
   offerId?: string | null;
   merchantSlug?: string | null;
+  market?: string | null;
 }): string | null {
   if (banner.linkType === "offer" && banner.offerId) {
     return `/go/${banner.offerId}`;
   }
   if (banner.linkType === "store" && banner.merchantSlug) {
-    return `/store/${banner.merchantSlug}`;
+    return marketPath(
+      banner.market ?? DEFAULT_MARKET,
+      `/store/${banner.merchantSlug}`,
+    );
   }
   return null;
 }

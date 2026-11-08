@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/lib/auth";
+import { SITE_NAME } from "@/lib/brand";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminTopBar } from "@/components/admin/AdminTopBar";
 
@@ -19,7 +20,7 @@ export default async function AdminAppLayout({
       <AdminSidebar logoutAction={logoutAction} />
       <div className="md:pl-[var(--sidebar-width)]">
         <AdminTopBar
-          title="AffiliateHub Admin"
+          title={`${SITE_NAME} Admin`}
           userEmail={session?.user?.email}
         />
         <div className="p-6">{children}</div>

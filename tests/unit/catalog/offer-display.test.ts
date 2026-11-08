@@ -78,7 +78,7 @@ describe("offer display", () => {
     );
     expect(
       bannerHref({ linkType: "store", offerId: null, merchantSlug: "nike" }),
-    ).toBe("/store/nike");
+    ).toBe("/us/store/nike");
     expect(bannerHref({ linkType: "offer", offerId: null, merchantSlug: null })).toBeNull();
   });
 });

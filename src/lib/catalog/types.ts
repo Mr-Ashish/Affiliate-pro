@@ -32,6 +32,7 @@ export type CreateManualOfferInput = {
   imageUrl?: string | null;
   channel?: OfferChannel | null;
   verifiedAt?: Date | null;
+  categoryIds?: string[];
 };
 
 export type ListActiveOffersInput = {

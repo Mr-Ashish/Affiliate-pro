@@ -1,7 +1,9 @@
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "@/lib/auth";
+import { BrandMark } from "@/components/public/BrandLogo";
 import { Button } from "@/components/ui/Button";
+import { SITE_NAME } from "@/lib/brand";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 
@@ -42,8 +44,9 @@ export default async function AdminLoginPage({
     <main className="flex min-h-screen items-center justify-center bg-surface px-4">
       <Card className="w-full max-w-md space-y-6 p-8">
         <div className="text-center">
-          <p className="text-sm font-bold uppercase tracking-wide text-primary">
-            AffiliateHub
+          <BrandMark className="mx-auto h-14 w-14" alt="" />
+          <p className="mt-3 text-sm font-bold uppercase tracking-wide text-primary">
+            {SITE_NAME}
           </p>
           <h1 className="mt-1 text-2xl font-bold text-on-surface">
             Admin login

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { MaterialIcon } from "@/components/public/MaterialIcon";
 import { cn } from "@/lib/ui/cn";
+import { DEFAULT_MARKET, marketPath } from "@/lib/market/path";
 
 export type BlogCardProps = {
   title: string;
@@ -13,6 +14,7 @@ export type BlogCardProps = {
   category?: string | null;
   readMinutes?: number;
   featured?: boolean;
+  market?: string;
 };
 
 function formatPublishedDate(value: Date | null): string | null {
@@ -34,8 +36,9 @@ export function BlogCard({
   category,
   readMinutes,
   featured = false,
+  market = DEFAULT_MARKET,
 }: BlogCardProps) {
-  const href = `/blog/${slug}`;
+  const href = marketPath(market, `/blog/${slug}`);
   const dateLabel = formatPublishedDate(publishedAt);
 
   return (

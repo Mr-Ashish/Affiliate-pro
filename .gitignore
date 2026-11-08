@@ -37,6 +37,10 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 .env.aws
+.env.networks
+
+# network probe samples (may contain voucher codes and tracking links)
+/data/networks/
 
 # vercel
 .vercel

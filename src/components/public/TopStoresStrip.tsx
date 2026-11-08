@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MaterialIcon } from "@/components/public/MaterialIcon";
 import { MerchantAvatar } from "@/components/public/MerchantAvatar";
 import { Container } from "@/components/ui/Container";
+import { marketPath } from "@/lib/market/path";
 
 export type TopStoreItem = {
   name: string;
@@ -11,11 +12,12 @@ export type TopStoreItem = {
 };
 
 export type TopStoresStripProps = {
+  market: string;
   stores: TopStoreItem[];
   totalCount: number;
 };
 
-export function TopStoresStrip({ stores, totalCount }: TopStoresStripProps) {
+export function TopStoresStrip({ market, stores, totalCount }: TopStoresStripProps) {
   if (stores.length === 0) {
     return null;
   }
@@ -35,7 +37,7 @@ export function TopStoresStrip({ stores, totalCount }: TopStoresStripProps) {
             {stores.map((store) => (
               <Link
                 key={store.slug}
-                href={`/store/${store.slug}`}
+                href={marketPath(market, `/store/${store.slug}`)}
                 className="group flex shrink-0 items-center gap-2.5 rounded-lg border border-outline-variant bg-slate-50 px-3 py-1.5 transition hover:border-primary-deep hover:bg-[#ECFDF5]/40 hover:shadow-sm focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20"
               >
                 <MerchantAvatar
@@ -57,7 +59,7 @@ export function TopStoresStrip({ stores, totalCount }: TopStoresStripProps) {
             ))}
           </div>
           <Link
-            href="/stores"
+            href={marketPath(market, "/stores")}
             className="inline-flex shrink-0 items-center gap-0.5 px-2 py-1 text-xs font-bold text-primary-deep hover:text-[#047857] hover:underline focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-primary/20"
           >
             All {totalCount.toLocaleString("en-US")} Stores

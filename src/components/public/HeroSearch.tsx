@@ -2,8 +2,10 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { SITE_NAME } from "@/lib/brand";
+import { marketPath } from "@/lib/market/path";
 
-export function HeroSearch() {
+export function HeroSearch({ market }: { market: string }) {
   return (
     <section className="relative overflow-hidden rounded-xl bg-surface-low px-6 py-16 text-center md:py-20">
       <div
@@ -20,17 +22,17 @@ export function HeroSearch() {
           Save more at your favorite stores with verified coupons.
         </h1>
         <p className="mb-8 text-base text-on-surface-variant md:text-lg">
-          AffiliateHub surfaces trusted promo codes and deals — always tracked
+          {SITE_NAME} surfaces trusted promo codes and deals — always tracked
           through our secure redirects.
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href="/stores">
+          <Link href={marketPath(market, "/stores")}>
             <Button variant="primary" size="lg">
               Browse Top Deals
             </Button>
           </Link>
           <form
-            action="/stores"
+            action={marketPath(market, "/stores")}
             method="get"
             className="relative w-full max-w-sm"
             role="search"

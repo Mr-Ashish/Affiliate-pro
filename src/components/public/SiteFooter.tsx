@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { BrandWordmark } from "@/components/public/BrandLogo";
 import { Container } from "@/components/ui/Container";
+import { SITE_NAME } from "@/lib/brand";
+import { listPublicCategories } from "@/lib/catalog/categories";
 import { listPopularMerchants } from "@/lib/catalog/merchants";
 import { catalogOrEmpty } from "@/lib/db-prerender";
-
-const MARKET = "US";
+import { marketPath } from "@/lib/market/path";
 
 const company = [
   { href: "/coming-soon", label: "About" },
@@ -12,20 +14,18 @@ const company = [
   { href: "/coming-soon", label: "Contact" },
 ] as const;
 
-export async function SiteFooter() {
-  const stores = await catalogOrEmpty(
-    () => listPopularMerchants({ market: MARKET, limit: 6 }),
-    [],
-  );
+export async function SiteFooter({ market }: { market: string }) {
+  const [stores, categories] = await Promise.all([
+    catalogOrEmpty(() => listPopularMerchants({ market, limit: 6 }), []),
+    catalogOrEmpty(() => listPublicCategories(market), []),
+  ]);
 
   return (
     <footer className="mt-auto border-t border-slate-200 bg-white">
       <Container className="py-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-3">
-            <p className="font-display text-lg font-extrabold text-slate-900">
-              Affiliate<span className="text-[#10B981]">Hub</span>
-            </p>
+            <BrandWordmark className="h-9 w-auto" />
             <p className="text-sm leading-relaxed text-slate-500">
               Verified coupons and deals for US shoppers. Every code is tracked
               through our secure redirects.
@@ -34,7 +34,7 @@ export async function SiteFooter() {
               {company.map((l) => (
                 <Link
                   key={l.label}
-                  href={l.href}
+                  href={marketPath(market, l.href)}
                   className="text-sm text-slate-500 hover:text-emerald-600"
                 >
                   {l.label}
@@ -51,7 +51,7 @@ export async function SiteFooter() {
               {stores.map((s) => (
                 <li key={s.id}>
                   <Link
-                    href={`/store/${s.slug}`}
+                    href={marketPath(market, `/store/${s.slug}`)}
                     className="text-sm text-slate-500 hover:text-emerald-600"
                   >
                     {s.name}
@@ -60,7 +60,7 @@ export async function SiteFooter() {
               ))}
               <li>
                 <Link
-                  href="/stores"
+                  href={marketPath(market, "/stores")}
                   className="text-sm font-semibold text-emerald-600 hover:text-emerald-700"
                 >
                   All stores
@@ -73,13 +73,26 @@ export async function SiteFooter() {
             <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-900">
               Categories
             </h2>
-            <p className="text-sm text-slate-500">Coming soon.</p>
-            <Link
-              href="/categories"
-              className="mt-2 inline-block text-sm font-semibold text-emerald-600 hover:text-emerald-700"
-            >
-              Browse categories
-            </Link>
+            <ul className="space-y-2">
+              {categories.slice(0, 8).map((category) => (
+                <li key={category.id}>
+                  <Link
+                    href={marketPath(market, `/category/${category.slug}`)}
+                    className="text-sm text-slate-500 hover:text-emerald-600"
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href={marketPath(market, "/categories")}
+                  className="text-sm font-semibold text-emerald-600 hover:text-emerald-700"
+                >
+                  Browse categories
+                </Link>
+              </li>
+            </ul>
           </div>
 
           <div>
@@ -87,7 +100,7 @@ export async function SiteFooter() {
               Disclosure
             </h2>
             <p className="text-xs leading-relaxed text-slate-500">
-              AffiliateHub is compensated by merchants when you click our links
+              {SITE_NAME} is compensated by merchants when you click our links
               and make a purchase. This does not affect the price you pay. Offers
               may change or expire without notice; verify terms on the
               merchant&apos;s site.
@@ -95,7 +108,7 @@ export async function SiteFooter() {
           </div>
         </div>
         <p className="mt-10 border-t border-slate-100 pt-6 text-xs text-slate-400">
-          &copy; {new Date().getFullYear()} AffiliateHub. All rights reserved.
+          &copy; {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
         </p>
       </Container>
     </footer>

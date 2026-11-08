@@ -1,3 +1,5 @@
+import { SITE_NAME } from "@/lib/brand";
+
 export type BlogPostingInput = {
   slug: string;
   title: string;
@@ -23,7 +25,7 @@ export type BlogPostingJsonLd = {
   };
   publisher: {
     "@type": "Organization";
-    name: "AffiliateHub";
+    name: string;
     url?: string;
   };
   url?: string;
@@ -46,7 +48,7 @@ export function toBlogPostingJsonLd(
 
   const publisher: BlogPostingJsonLd["publisher"] = {
     "@type": "Organization",
-    name: "AffiliateHub",
+    name: SITE_NAME,
   };
   if (base) {
     publisher.url = base;
